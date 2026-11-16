@@ -6,13 +6,13 @@
 
 ## What Changes
 
-- Одна страница Nuxt 3 / Vue 3 (`<script setup>`, Composition API, SPA) на PrimeVue 4.
+- Страница бронирования Nuxt 3 / Vue 3 (`<script setup>`, Composition API, SPA) на PrimeVue 4: маршрут `/` в `pages/index.vue`, общий каркас в `layouts/default.vue`, структура Nuxt рассчитана на добавление новых страниц.
 - Список слотов со статусами (свободен / занят / прошёл), фильтр по дате на клиенте, время в поясе расписания.
 - Диалог бронирования (имя, email, проверка в браузере), отмена с подтверждением.
 - Состояния загрузки, блокировка действий на время запроса, обработка 422/409/сетевых ошибок с повтором.
-- API-модуль `utils/bookingApi.js` и composable `composables/useSlots.js`; состояние — реактивность Vue.
+- API-модуль `services/bookingApi.js` и composable `composables/useSlots.js`; состояние — реактивность Vue.
 
-Вне объёма: роутинг (`pages/`), Pinia, SSR, авторизация, i18n-переключатель, e2e-тесты фронтенда.
+Вне объёма: дополнительные страницы (кроме `/`), Pinia, SSR, авторизация, i18n-переключатель, e2e-тесты фронтенда.
 
 ## Capabilities
 
@@ -23,4 +23,4 @@
 
 ## Impact
 
-`frontend/{app.vue,components,composables,utils,plugins}`. Зависит от `add-slots-api` и `add-bookings-api`.
+`frontend/{app.vue,layouts,pages,components,composables,services,utils,plugins,assets}`. Зависит от `add-slots-api` и `add-bookings-api`.

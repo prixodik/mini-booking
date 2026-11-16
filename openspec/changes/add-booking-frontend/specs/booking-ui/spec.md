@@ -95,8 +95,8 @@
 - **THEN** запрос не отправляется
 
 ### Requirement: API access isolated from components
-Работа с HTTP SHALL быть вынесена в модуль `utils/bookingApi.js`, а состояние и действия — в composable `composables/useSlots.js`; компоненты MUST NOT вызывать `fetch` напрямую. Для состояния используется только реактивность Vue.
+Работа с HTTP SHALL быть вынесена в модуль `services/bookingApi.js`, а состояние и действия — в composable `composables/useSlots.js`; компоненты MUST NOT вызывать `fetch` напрямую. Для состояния используется только реактивность Vue.
 
 #### Scenario: Единая точка API
-- **WHEN** в `components/` и `app.vue` ищутся вызовы `fetch` или `axios`
+- **WHEN** в `components/`, `layouts/`, `pages/` и `app.vue` ищутся вызовы `fetch` или `axios`
 - **THEN** их нет

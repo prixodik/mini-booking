@@ -9,7 +9,7 @@
 
 ## 2. Frontend
 
-- [ ] 2.1 Создать Nuxt 3 проект в `frontend/` (`nuxt@3`, JavaScript, `ssr: false`, без Pinia и без `pages/`: одна страница в `app.vue`)
+- [ ] 2.1 Создать Nuxt 3 проект в `frontend/` (`nuxt@3`, JavaScript, `ssr: false`) со стандартной структурой Nuxt: `app.vue` (`<NuxtLayout><NuxtPage/></NuxtLayout>`), `layouts/default.vue`, `pages/index.vue`, `components/`, `composables/`, `services/`, `utils/`, `plugins/`, `assets/`; без Pinia
 - [ ] 2.2 Установить `primevue@4`, `@primeuix/themes`, `primeicons`; подключить PrimeVue (тема Aura, `ToastService`, `ConfirmationService`) в плагине `plugins/primevue.js`
 - [ ] 2.3 Настроить dev-прокси `/api` → `http://localhost:8000` через `nitro.devProxy` в `nuxt.config.js`
 

@@ -19,6 +19,17 @@ Backend MUST работать на PHP 8.2 и выше и Laravel 11 и выше
 - **WHEN** открыты `backend/composer.json` и `frontend/package.json`
 - **THEN** ограничения версий соответствуют выбору выше, а `composer.lock` и `package-lock.json` закоммичены
 
+### Requirement: Extensible Nuxt frontend structure
+Frontend SHALL следовать стандартной структуре Nuxt с файловым роутингом: `app.vue` с `<NuxtLayout>` и `<NuxtPage>`, `layouts/`, `pages/` (сейчас `pages/index.vue`), `components/` (по функциональности, например `components/booking/`), `composables/`, `services/` (HTTP), `utils/`, `plugins/`.
+
+#### Scenario: Тонкая страница
+- **WHEN** открывается `pages/index.vue`
+- **THEN** она только компонует компоненты и composable, без прямых HTTP-вызовов
+
+#### Scenario: Добавление новой страницы
+- **WHEN** разработчик создаёт файл `pages/<имя>.vue`
+- **THEN** маршрут появляется без изменений в `app.vue`, `nuxt.config.js` и существующих компонентах
+
 ### Requirement: Database is SQLite by default
 Окружение по умолчанию SHALL использовать SQLite-файл без дополнительных сервисов; миграции и код MUST оставаться переносимыми на MySQL и PostgreSQL (без SQLite-специфичного SQL).
 

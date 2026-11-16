@@ -18,7 +18,7 @@ context: |
 
   Структура репозитория:
     backend/    — Laravel (JSON API, миграции, Seeder, тесты)
-    frontend/   — Nuxt 3 + PrimeVue (одна страница)
+    frontend/   — Nuxt 3 + PrimeVue (pages/, layouts/, components/, composables/, services/; сейчас одна страница `/`)
     openspec/   — спецификации и changes
     README.md   — запуск, настройки, описание уникальности брони и времени
 

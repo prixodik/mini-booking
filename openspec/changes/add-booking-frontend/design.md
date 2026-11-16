@@ -16,17 +16,23 @@ Backend отдаёт плоский список слотов с `status`, `book
 
 ```
 frontend/                         Nuxt 3 (ssr: false)
-├── nuxt.config.js                ssr: false, nitro.devProxy для /api, css
-├── plugins/primevue.js           PrimeVue + тема Aura (@primeuix/themes) + ToastService + ConfirmationService
-├── app.vue                       страница: заголовок, фильтр даты, список, диалоги, <Toast/>, <ConfirmDialog/>
-├── utils/bookingApi.js           fetch-обёртка: getSlots(), createBooking(), cancelBooking(); класс ApiError {status, message, errors}
-├── utils/datetime.js             форматирование в поясе расписания через Intl.DateTimeFormat({timeZone})
+├── nuxt.config.js                ssr: false, css, nitro.devProxy для /api
+├── app.vue                       <NuxtLayout><NuxtPage/></NuxtLayout>, глобальные <Toast/> и <ConfirmDialog/>
+├── layouts/default.vue           каркас: шапка, контейнер, адаптивные отступы
+├── pages/index.vue               страница бронирования `/` — тонкая: useSlots() + компоненты
+├── components/booking/           компоненты функциональности «бронирование»
+│   ├── SlotList.vue              слоты выбранной даты
+│   ├── DateFilter.vue            фильтр по дате
+│   └── BookingDialog.vue         форма имя/email, ошибки полей
 ├── composables/useSlots.js       slots, timezone, selectedDate, loading, submitting, error, действия
-├── components/SlotList.vue       список слотов выбранной даты
-└── components/BookingDialog.vue  форма имя/email, ошибки полей
+├── services/httpClient.js        общий fetch-запрос, заголовки, класс ApiError {status, message, errors}
+├── services/bookingApi.js        getSlots(), createBooking(), cancelBooking()
+├── utils/datetime.js             форматирование в поясе расписания через Intl.DateTimeFormat({timeZone})
+├── plugins/primevue.js           PrimeVue + тема Aura (@primeuix/themes) + ToastService + ConfirmationService
+└── assets/css/main.css           общие стили
 ```
 
-Автоимпорт Nuxt подхватывает `composables/`, `utils/` и `components/`; импорты PrimeVue-компонентов в `.vue` — явные (`import Button from 'primevue/button'`), чтобы не зависеть от `@primevue/nuxt-module`. Запросы выполняются на клиенте (SPA), поэтому используется `$fetch`/`fetch` внутри `utils/bookingApi.js`, а не `useFetch` с SSR-кэшем.
+Принципы расширяемости: новая страница — файл в `pages/`; новая функциональность — своя папка в `components/<feature>/`, свой composable и сервис в `services/`; `httpClient.js` общий для всех сервисов. Автоимпорт Nuxt подхватывает `composables/`, `utils/` и `components/` (с префиксом папки: `components/booking/SlotList.vue` → `<BookingSlotList/>`); `services/` импортируются явно (`~/services/bookingApi`), импорты PrimeVue-компонентов — явные (`import Button from 'primevue/button'`), чтобы не зависеть от `@primevue/nuxt-module`. Запросы выполняются на клиенте (SPA), поэтому используется `fetch` внутри `services/`, а не `useFetch` с SSR-кэшем.
 
 ### Компоненты PrimeVue
 
