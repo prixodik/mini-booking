@@ -1,7 +1,10 @@
 <template>
   <li class="slot-card" :class="`slot-card--${item.status}`">
     <div class="slot-card__header">
-      <span class="slot-card__time">{{ formatTime(item.starts_at, timezone) }}–{{ formatTime(item.ends_at, timezone) }}</span>
+      <span class="slot-card__time">
+        <i class="pi pi-clock slot-card__time-icon" aria-hidden="true" />
+        {{ formatTime(item.starts_at, timezone) }}–{{ formatTime(item.ends_at, timezone) }}
+      </span>
       <span class="slot-card__status" :class="`slot-card__status--${item.status}`">
         <i class="pi" :class="status.icon" aria-hidden="true" />
         {{ status.label }}
@@ -44,7 +47,7 @@ const emit = defineEmits(['book', 'cancel'])
 const STATUS = {
   available: { label: 'Свободен', icon: 'pi-check-circle' },
   booked: { label: 'Занят', icon: 'pi-lock' },
-  past: { label: 'Прошёл', icon: 'pi-clock' },
+  past: { label: 'Прошёл', icon: 'pi-history' },
 }
 const status = computed(() => STATUS[props.item.status])
 </script>
@@ -72,9 +75,16 @@ const status = computed(() => STATUS[props.item.status])
   gap: var(--mb-space-2);
 }
 .slot-card__time {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mb-space-2);
   font-size: 1.25rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+}
+.slot-card__time-icon {
+  font-size: 1.125rem;
+  color: var(--mb-color-text-muted);
 }
 .slot-card__status {
   display: inline-flex;
