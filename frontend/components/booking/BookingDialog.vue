@@ -6,6 +6,7 @@
     :closable="!loading"
     :style="{ width: '26rem' }"
     :breakpoints="{ '575px': 'calc(100vw - 32px)' }"
+    @show="focusName"
     @update:visible="emit('update:visible', $event)"
   >
     <p v-if="slotItem" class="booking-dialog__slot">{{ slotLabel }}</p>
@@ -16,8 +17,8 @@
         <InputText
           id="customer-name"
           v-model.trim="name"
+          ref="nameField"
           class="booking-dialog__input"
-          autofocus
           required
           autocomplete="name"
           :invalid="!!errors.name"
@@ -81,6 +82,13 @@ const props = defineProps({
   generalError: { type: String, default: '' },
 })
 const emit = defineEmits(['update:visible', 'submit'])
+
+// Dialog после открытия фокусирует первый элемент с атрибутом autofocus, а если такого нет — кнопку закрытия.
+// Vue не всегда оставляет autofocus атрибутом в DOM, поэтому при открытии выставляем его на поле «Имя» явно.
+const nameField = ref(null)
+function focusName() {
+  nameField.value?.$el?.setAttribute('autofocus', '')
+}
 
 const name = ref('')
 const email = ref('')
