@@ -1,0 +1,56 @@
+/*
+ * Дизайн-токены интерфейса (префикс --mb-). Единственное место, где допустимы цветовые литералы
+ * (кроме пресета PrimeVue в plugins/primevue.js). Значения и расчёт контраста:
+ * openspec/changes/redesign-booking-ui/design.md.
+ */
+:root {
+  /* Поверхности и текст (Aura: surface-100 / surface.0 / slate) */
+  --mb-color-bg: #f1f5f9;
+  --mb-color-surface: #ffffff;
+  --mb-color-text: #334155;
+  --mb-color-text-muted: #475569;
+  --mb-color-border: #e2e8f0;
+  --mb-color-border-input: #64748b;
+
+  /* Акцент: фиолетовый (Aura violet.700 / 800 / 900 / 100) */
+  --mb-color-accent: #6d28d9;
+  --mb-color-accent-hover: #5b21b6;
+  --mb-color-accent-active: #4c1d95;
+  --mb-color-accent-soft: #ede9fe;
+  --mb-color-on-accent: #ffffff;
+
+  /* Статусы слотов */
+  --mb-color-available-fg: #166534;
+  --mb-color-available-bg: #dcfce7;
+  --mb-color-booked-fg: #9a3412;
+  --mb-color-booked-bg: #ffedd5;
+  --mb-color-past-fg: #475569;
+  --mb-color-past-bg: #e2e8f0;
+
+  /* Ошибки */
+  --mb-color-danger: #b91c1c;
+  --mb-color-danger-bg: #fee2e2;
+  --mb-color-danger-fg: #991b1b;
+
+  /* Отступы, радиусы, тени */
+  --mb-space-1: 4px;
+  --mb-space-2: 8px;
+  --mb-space-3: 12px;
+  --mb-space-4: 16px;
+  --mb-space-5: 24px;
+  --mb-space-6: 32px;
+  --mb-radius-sm: 4px;
+  --mb-radius-md: 6px;
+  --mb-radius-lg: 12px;
+  --mb-shadow-card: 0 3px 5px rgba(0, 0, 0, 0.02), 0 0 2px rgba(0, 0, 0, 0.05), 0 1px 4px rgba(0, 0, 0, 0.08);
+  --mb-shadow-overlay: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+
+  /* Типографика */
+  --mb-font-family: 'Nunito Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --mb-font-size-base: 1rem;
+
+  /* Раскладка */
+  --mb-topbar-height: 4rem;
+  --mb-container-max: 1120px;
+  --mb-tap-min: 44px;
+}

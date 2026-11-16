@@ -3,6 +3,13 @@
 Бронирование одной переговорной комнаты по часовым слотам (09:00–18:00, каждый день, включая выходные).
 Backend — Laravel 12 (JSON API), frontend — Nuxt 3 (SPA) + PrimeVue 4, БД — SQLite.
 
+## Оформление интерфейса
+
+- Верстка по БЭМ (`block__element--modifier`, один компонент — один блок), стили в `<style scoped>` компонентов, общие токены (цвета, отступы, радиусы, тени, шрифт) — `frontend/assets/css/tokens.css`.
+- Тема PrimeVue — Aura, только светлая, фиолетовый акцент `#6D28D9`, настраивается в `frontend/plugins/primevue.js` (`definePreset`), внутренние классы `.p-*` не переопределяются.
+- Шрифт Nunito Sans (`@fontsource/nunito-sans`) подключается локально; `@primeuix/themes` закреплён на MIT-версии 2.0.3.
+- Правила и расчёт контраста: `openspec/changes/redesign-booking-ui/design.md`.
+
 ## Структура репозитория
 
 ```

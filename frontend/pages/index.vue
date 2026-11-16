@@ -1,13 +1,13 @@
 <template>
-  <section>
-    <BookingDateFilter v-model="selectedDate" :dates="dates" :disabled="loading" class="page__filter" />
+  <section class="page">
+    <div class="page__panel">
+      <BookingDateFilter v-model="selectedDate" :dates="dates" :disabled="loading" />
+    </div>
 
-    <Message v-if="loadError" severity="error" :closable="false" class="page__message">
-      <div class="page__error">
-        <span>{{ loadError }}</span>
-        <Button label="Повторить" size="small" icon="pi pi-refresh" :loading="loading" @click="load()" />
-      </div>
-    </Message>
+    <div v-if="loadError" class="page__alert" role="alert">
+      <span>{{ loadError }}</span>
+      <Button class="page__retry" label="Повторить" icon="pi pi-refresh" :loading="loading" @click="load()" />
+    </div>
 
     <div v-if="loading && !slots.length" class="page__loading" role="status">
       <ProgressSpinner style="width: 40px; height: 40px" stroke-width="5" />
@@ -40,7 +40,6 @@
 
 <script setup>
 import Button from 'primevue/button'
-import Message from 'primevue/message'
 import ProgressSpinner from 'primevue/progressspinner'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
@@ -91,6 +90,7 @@ function askCancel(slot) {
     acceptLabel: 'Отменить бронь',
     rejectLabel: 'Не отменять',
     acceptProps: { severity: 'danger' },
+    rejectProps: { severity: 'secondary', text: true },
     accept: () => cancelBooking(slot),
   })
 }
@@ -116,27 +116,41 @@ async function cancelBooking(slot) {
 </script>
 
 <style scoped>
-.page__filter {
-  margin-bottom: 16px;
-}
-.page__message {
-  margin-bottom: 16px;
-}
-.page__error {
+.page {
   display: flex;
+  flex-direction: column;
+  gap: var(--mb-space-4);
+}
+.page__panel {
+  padding: var(--mb-space-4);
+  background: var(--mb-color-surface);
+  border: 1px solid var(--mb-color-border);
+  border-radius: var(--mb-radius-md);
+  box-shadow: var(--mb-shadow-card);
+}
+.page__alert {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: var(--mb-space-3);
+  padding: var(--mb-space-3) var(--mb-space-4);
+  color: var(--mb-color-danger-fg);
+  background: var(--mb-color-danger-bg);
+  border-radius: var(--mb-radius-md);
+}
+.page__retry {
+  min-height: var(--mb-tap-min);
 }
 .page__loading {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 24px 0;
+  gap: var(--mb-space-3);
+  padding: var(--mb-space-5) 0;
 }
 .page__empty,
 .page__tz {
-  color: #52606d;
+  margin: 0;
+  color: var(--mb-color-text-muted);
 }
 </style>

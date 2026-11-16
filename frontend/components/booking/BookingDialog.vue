@@ -4,29 +4,61 @@
     modal
     header="Бронирование слота"
     :closable="!loading"
-    :style="{ width: '26rem', maxWidth: '95vw' }"
+    :style="{ width: '26rem' }"
+    :breakpoints="{ '575px': 'calc(100vw - 32px)' }"
     @update:visible="emit('update:visible', $event)"
   >
-    <p v-if="slotItem" class="dialog__slot">{{ slotLabel }}</p>
+    <p v-if="slotItem" class="booking-dialog__slot">{{ slotLabel }}</p>
 
-    <form class="form" novalidate @submit.prevent="submit">
-      <div class="form__field">
+    <form class="booking-dialog__form" novalidate @submit.prevent="submit">
+      <div class="booking-dialog__field">
         <label for="customer-name">Имя</label>
-        <InputText id="customer-name" v-model.trim="name" required autocomplete="name" :invalid="!!errors.name" :disabled="loading" />
-        <small v-if="errors.name" class="form__error">{{ errors.name }}</small>
+        <InputText
+          id="customer-name"
+          v-model.trim="name"
+          class="booking-dialog__input"
+          required
+          autocomplete="name"
+          :invalid="!!errors.name"
+          :disabled="loading"
+        />
+        <small v-if="errors.name" class="booking-dialog__error">{{ errors.name }}</small>
       </div>
 
-      <div class="form__field">
+      <div class="booking-dialog__field">
         <label for="customer-email">Email</label>
-        <InputText id="customer-email" v-model.trim="email" type="email" required autocomplete="email" :invalid="!!errors.email" :disabled="loading" />
-        <small v-if="errors.email" class="form__error">{{ errors.email }}</small>
+        <InputText
+          id="customer-email"
+          v-model.trim="email"
+          class="booking-dialog__input"
+          type="email"
+          required
+          autocomplete="email"
+          :invalid="!!errors.email"
+          :disabled="loading"
+        />
+        <small v-if="errors.email" class="booking-dialog__error">{{ errors.email }}</small>
       </div>
 
-      <Message v-if="generalError" severity="error" size="small" :closable="false">{{ generalError }}</Message>
+      <div v-if="generalError" class="booking-dialog__alert" role="alert">{{ generalError }}</div>
 
-      <div class="form__actions">
-        <Button type="button" label="Отмена" severity="secondary" text :disabled="loading" @click="emit('update:visible', false)" />
-        <Button type="submit" :label="generalError ? 'Повторить' : 'Забронировать'" :loading="loading" :disabled="loading" />
+      <div class="booking-dialog__actions">
+        <Button
+          type="button"
+          class="booking-dialog__button"
+          label="Отмена"
+          severity="secondary"
+          text
+          :disabled="loading"
+          @click="emit('update:visible', false)"
+        />
+        <Button
+          type="submit"
+          class="booking-dialog__button"
+          :label="generalError ? 'Повторить' : 'Забронировать'"
+          :loading="loading"
+          :disabled="loading"
+        />
       </div>
     </form>
   </Dialog>
@@ -36,7 +68,6 @@
 import Dialog from 'primevue/dialog'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
-import Message from 'primevue/message'
 
 const props = defineProps({
   visible: { type: Boolean, default: false },
@@ -58,7 +89,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const slotLabel = computed(() =>
   props.slotItem
-    ? `${dateKey(props.slotItem.starts_at, props.timezone)}, ${formatTime(props.slotItem.starts_at, props.timezone)}–${formatTime(props.slotItem.ends_at, props.timezone)}`
+    ? `${formatDateLabel(dateKey(props.slotItem.starts_at, props.timezone))}, ${formatTime(props.slotItem.starts_at, props.timezone)}–${formatTime(props.slotItem.ends_at, props.timezone)}`
     : '',
 )
 
@@ -91,26 +122,38 @@ function submit() {
 </script>
 
 <style scoped>
-.dialog__slot {
-  margin: 0 0 16px;
-  font-weight: 600;
+.booking-dialog__slot {
+  margin: 0 0 var(--mb-space-4);
+  font-weight: 700;
 }
-.form {
+.booking-dialog__form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--mb-space-4);
 }
-.form__field {
+.booking-dialog__field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--mb-space-2);
 }
-.form__error {
-  color: #c0392b;
+.booking-dialog__input {
+  min-height: var(--mb-tap-min);
 }
-.form__actions {
+.booking-dialog__error {
+  color: var(--mb-color-danger);
+}
+.booking-dialog__alert {
+  padding: var(--mb-space-3);
+  color: var(--mb-color-danger-fg);
+  background: var(--mb-color-danger-bg);
+  border-radius: var(--mb-radius-md);
+}
+.booking-dialog__actions {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: var(--mb-space-2);
+}
+.booking-dialog__button {
+  min-height: var(--mb-tap-min);
 }
 </style>

@@ -5,7 +5,17 @@ export default defineNuxtConfig({
   // SSR не нужен (см. openspec/changes/scaffold-project/design.md).
   ssr: false,
   devtools: { enabled: false },
-  css: ['primeicons/primeicons.css', '~/assets/css/main.css'],
+  css: [
+    'primeicons/primeicons.css',
+    // Шрифт Nunito Sans из node_modules (400/600/700), без обращения к CDN. Берём общие файлы весов (400.css и т.д.):
+    // в них у каждого подсета (cyrillic, latin, ...) есть unicode-range, и браузер грузит только нужные файлы.
+    // Отдельные файлы cyrillic-400.css / latin-400.css unicode-range не содержат и перекрывали бы друг друга.
+    '@fontsource/nunito-sans/400.css',
+    '@fontsource/nunito-sans/600.css',
+    '@fontsource/nunito-sans/700.css',
+    '~/assets/css/tokens.css',
+    '~/assets/css/base.css',
+  ],
   app: {
     head: {
       htmlAttrs: { lang: 'ru' },
