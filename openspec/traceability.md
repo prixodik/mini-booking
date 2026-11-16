@@ -20,7 +20,7 @@
 | 4. Дата, время, статус; различимость свободных/занятых/прошедших; фильтр по дате; время в поясе расписания | Теги статусов, фильтр на клиенте, `meta.timezone` | `booking-ui` (Slot list…, Display in schedule timezone, Date filter) |
 | 4. Форма имя/email для свободного слота, проверка в браузере; отмена с подтверждением | Диалог, клиентская валидация, ConfirmDialog | `booking-ui` (Booking form, Cancel with confirmation) |
 | 4. Загрузка, блокировка действий, 422 по полям, 409 с причиной и обновлением, сбой сети/сервера с повтором | Соответствующие требования | `booking-ui` (Loading and blocked actions, Validation errors, Conflict handling, Network and server errors…) |
-| 4. Обновление без перезагрузки; API в composable/модуле; состояние на реактивности Vue | `bookingApi.js`, `useSlots.js` | `booking-ui` (Successful create and cancel…, API access isolated…) |
+| 4. Обновление без перезагрузки; API в composable/модуле; состояние на реактивности Vue | `bookingApi.js`, `useBookingSlots.js` | `booking-ui` (Successful create and cancel…, API access isolated…) |
 | 5. Два теста PHPUnit/Pest: успешная бронь; 409 и одна активная бронь | Два обязательных теста | `backend-tests` |
 | 5. Репозиторий: backend, frontend, миграции, Seeder, тесты | Раскладка | `project-setup` (Repository layout) |
 | 5. README: зависимости, окружение, команды, уникальность, время, незавершённое | Раздел за разделом | `project-readme` |

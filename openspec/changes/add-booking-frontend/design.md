@@ -19,12 +19,12 @@ frontend/                         Nuxt 3 (ssr: false)
 ├── nuxt.config.js                ssr: false, css, nitro.devProxy для /api
 ├── app.vue                       <NuxtLayout><NuxtPage/></NuxtLayout>, глобальные <Toast/> и <ConfirmDialog/>
 ├── layouts/default.vue           каркас: шапка, контейнер, адаптивные отступы
-├── pages/index.vue               страница бронирования `/` — тонкая: useSlots() + компоненты
+├── pages/index.vue               страница бронирования `/` — тонкая: useBookingSlots() + компоненты
 ├── components/booking/           компоненты функциональности «бронирование»
 │   ├── SlotList.vue              слоты выбранной даты
 │   ├── DateFilter.vue            фильтр по дате
 │   └── BookingDialog.vue         форма имя/email, ошибки полей
-├── composables/useSlots.js       slots, timezone, selectedDate, loading, submitting, error, действия
+├── composables/useBookingSlots.js       slots, timezone, selectedDate, loading, submitting, error, действия
 ├── services/httpClient.js        общий fetch-запрос, заголовки, класс ApiError {status, message, errors}
 ├── services/bookingApi.js        getSlots(), createBooking(), cancelBooking()
 ├── utils/datetime.js             форматирование в поясе расписания через Intl.DateTimeFormat({timeZone})
@@ -40,7 +40,7 @@ frontend/                         Nuxt 3 (ssr: false)
 
 ### Состояние и запросы
 
-- Один `useSlots()` на страницу. Состояние: `slots`, `timezone`, `selectedDate`, `loading` (загрузка списка), `submitting` (создание/отмена), `lastFailedAction` (замыкание для «Повторить»).
+- Один `useBookingSlots()` на страницу. Состояние: `slots`, `timezone`, `selectedDate`, `loading` (загрузка списка), `submitting` (создание/отмена), `lastFailedAction` (замыкание для «Повторить»).
 - Даты считаются в поясе расписания через `Intl.DateTimeFormat('sv-SE', {timeZone, ...})` — это даёт `YYYY-MM-DD` без внешних библиотек. Сравнение «сегодня» — тоже через пояс расписания, а не `new Date().toISOString()`.
 - Классификация ошибок в `ApiError`: `status 422` → поля, `409` → сообщение + обновление списка, `404` при отмене → сообщение сервера + обновление списка, сеть/5xx → ошибка с «Повторить».
 - Запрос выполняется только если нет активного (`submitting`) — защита от двойной отправки поверх `:disabled` на кнопках.

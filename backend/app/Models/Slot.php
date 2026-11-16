@@ -1,0 +1,65 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
+
+/**
+ * Часовой слот переговорной.
+ *
+ * Время хранится в БД в UTC, а наружу отдаётся в часовом поясе расписания
+ * (config('app.timezone')). Поэтому смена APP_TIMEZONE не портит сохранённые слоты.
+ */
+class Slot extends Model
+{
+    use HasFactory;
+
+    public const DB_FORMAT = 'Y-m-d H:i:s';
+
+    protected $fillable = ['starts_at', 'ends_at'];
+
+    public static function toDbValue(\DateTimeInterface|string $moment): string
+    {
+        return Carbon::parse($moment)->utc()->format(self::DB_FORMAT);
+    }
+
+    protected function startsAt(): Attribute
+    {
+        return $this->utcAttribute();
+    }
+
+    protected function endsAt(): Attribute
+    {
+        return $this->utcAttribute();
+    }
+
+    private function utcAttribute(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => Carbon::parse($value, 'UTC')->setTimezone(config('app.timezone')),
+            set: fn ($value) => self::toDbValue($value),
+        );
+    }
+
+    /** Слот прошёл, если он начался в текущий момент или раньше. */
+    public function isPast(): bool
+    {
+        return $this->starts_at->lessThanOrEqualTo(now());
+    }
+
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    /** Активная (не отменённая) бронь; по БД их не больше одной. */
+    public function activeBooking(): HasOne
+    {
+        return $this->hasOne(Booking::class)->whereNull('cancelled_at');
+    }
+}

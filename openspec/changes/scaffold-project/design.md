@@ -31,6 +31,9 @@ mini-booking/
 - **SQLite.** Нулевая настройка, воспроизводимость. Ключевая гарантия (unique-индекс) работает одинаково в SQLite, MySQL, PostgreSQL. Ограничение: SQLite сериализует записи, поэтому настоящий параллельный тест на нём не показателен (см. `booking-integrity`).
 - **Laravel API без Sanctum.** В Laravel 11+ `routes/api.php` по умолчанию не подключён; `php artisan install:api` дополнительно ставит Sanctum — он не нужен (авторизация вне объёма). Подключаем `api:` в `bootstrap/app.php` вручную (проверить при реализации).
 - **JSON-ошибки.** В `bootstrap/app.php` для запросов `api/*` `shouldRenderJsonWhen` возвращает true.
+- **`APP_TIMEZONE` в Laravel 12.** В `config/app.php` часовой пояс по умолчанию задан константой `'timezone' => 'UTC'`, а не через env; при реализации заменено на `env('APP_TIMEZONE', 'UTC')`, иначе `.env` не влиял бы на пояс расписания.
+- **Убрано из стартового каркаса:** миграции users/cache/jobs, модель `User` и её фабрика (авторизация вне объёма); в `.env.example` `SESSION_DRIVER=file`, `CACHE_STORE=file`, `QUEUE_CONNECTION=sync`, чтобы не требовались служебные таблицы.
+- **Название composable.** Nuxt автоимпортирует `useSlots` из Vue, поэтому одноимённый composable конфликтует; в проекте он называется `useBookingSlots`.
 - **Тесты — PHPUnit** (по умолчанию в Laravel, без доп. зависимостей), не Pest.
 - **JavaScript вместо TypeScript** на фронте (Nuxt допускает JS): меньше сборки/типов, быстрее правка на защите.
 - **Прокси Nuxt (Nitro `devProxy`)** `/api` → `http://localhost:8000/api` вместо CORS; в `nuxt.config.js` (синтаксис проверить по документации Nuxt при реализации).

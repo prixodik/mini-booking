@@ -1,0 +1,31 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\Slot;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
+
+/** @extends Factory<Slot> */
+class SlotFactory extends Factory
+{
+    protected $model = Slot::class;
+
+    public function definition(): array
+    {
+        $start = Carbon::tomorrow(config('app.timezone'))->setTime(9, 0);
+
+        return [
+            'starts_at' => $start,
+            'ends_at' => $start->copy()->addHour(),
+        ];
+    }
+
+    public function startingAt(Carbon $start): static
+    {
+        return $this->state(fn () => [
+            'starts_at' => $start,
+            'ends_at' => $start->copy()->addHour(),
+        ]);
+    }
+}
