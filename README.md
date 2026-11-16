@@ -14,7 +14,7 @@ AGENTS.md    правило «spec first» и порядок changes
 
 ## Требования
 
-- PHP 8.2+ (с расширениями `pdo_sqlite`, `mbstring`, `xml`, `curl`), Composer 2
+- PHP 8.2+ (с расширениями `pdo_sqlite`, `mbstring`, `xml`, `curl`), Composer 2. Если в `PATH` несколько версий PHP, убедитесь, что `php -v` показывает 8.2+ (Composer и `artisan` берут `php` из `PATH`)
 - Node.js 20.19+ или 22.12+ и npm (для frontend; OpenSpec требует Node.js 22.12+)
 
 ## Backend
@@ -24,7 +24,7 @@ cd backend
 composer install
 cp .env.example .env
 php artisan key:generate
-touch database/database.sqlite        # Windows (PowerShell): New-Item database/database.sqlite
+touch database/database.sqlite        # PowerShell: New-Item database/database.sqlite -ItemType File
 php artisan migrate                   # миграции: slots, bookings
 php artisan db:seed                   # расписание на 7 дней × 9 слотов (можно запускать повторно)
 php artisan serve                     # http://localhost:8000
