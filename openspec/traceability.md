@@ -15,7 +15,7 @@
 | 3. 422 по полям, в т. ч. несуществующий `slot_id` | `errors.slot_id` | `bookings-api` (Validation, сценарий «Несуществующий slot_id») |
 | 3. 409 для занятого или прошедшего слота с понятным сообщением | Два сообщения на русском | `bookings-api` (Occupied slot conflict, Past slot conflict) |
 | 3. Параллельные запросы → ровно одна активная бронь, гарантия на backend через БД | UNIQUE `active_slot_id`, перехват нарушения → 409 | `booking-integrity`, `bookings-api` (Concurrent requests…) |
-| 3. `DELETE /api/bookings/{id}`: 204, слот снова доступен, повтор — 204 или 404, без авторизации | 204; неизвестный ID — 404; повтор — 204 | `bookings-api` (Cancel booking, Rebooking after cancellation) |
+| 3. `DELETE /api/bookings/{id}`: 204, слот снова доступен, повтор — 204 или 404, без авторизации | 204; неизвестный ID — 404; повторная отмена — 404 с другим сообщением | `bookings-api` (Cancel booking, Rebooking after cancellation) |
 | 4. Composition API, `<script setup>`, готовая UI-библиотека, удобство на ноутбуке и телефоне | PrimeVue 4, адаптивная вёрстка от 360 px | `project-setup` (Supported stack versions), `booking-ui` (Responsive layout) |
 | 4. Дата, время, статус; различимость свободных/занятых/прошедших; фильтр по дате; время в поясе расписания | Теги статусов, фильтр на клиенте, `meta.timezone` | `booking-ui` (Slot list…, Display in schedule timezone, Date filter) |
 | 4. Форма имя/email для свободного слота, проверка в браузере; отмена с подтверждением | Диалог, клиентская валидация, ConfirmDialog | `booking-ui` (Booking form, Cancel with confirmation) |
@@ -31,7 +31,7 @@
 1. Laravel 12 (ТЗ: 11+), PHP ^8.2.
 2. `APP_TIMEZONE=Europe/Moscow` в `.env.example` (ТЗ пояс не называет).
 3. Статус `past` приоритетнее `booked`; `booking_id` для прошедшего слота остаётся.
-4. Отмена уже отменённой брони → 204; неизвестный ID → 404 (оба варианта допустимы ТЗ).
+4. Повторная отмена → 404 «Бронь уже отменена», неизвестный ID → 404 «Бронь не найдена» (решение владельца; ТЗ допускает 204 или 404).
 5. Отмена брони начавшегося слота на backend разрешена, в UI действие скрыто.
 6. `GET /api/slots` отдаёт все слоты без пагинации.
 7. Язык интерфейса, сообщений API и README — русский.
