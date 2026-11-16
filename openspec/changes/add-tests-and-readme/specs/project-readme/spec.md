@@ -10,7 +10,7 @@
 
 #### Scenario: Запуск с нуля
 - **WHEN** разработчик выполняет команды README последовательно на чистом клоне
-- **THEN** backend доступен на `http://localhost:8000`, frontend на адресе Vite, расписание заполнено
+- **THEN** backend доступен на `http://localhost:8000`, frontend на адресе Nuxt dev-сервера, расписание заполнено
 
 ### Requirement: Environment settings
 README MUST описывать ключевые настройки `.env`: `APP_TIMEZONE`, `DB_CONNECTION` и путь SQLite-файла, `APP_LOCALE`.

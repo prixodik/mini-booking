@@ -35,4 +35,4 @@
 5. Отмена брони начавшегося слота на backend разрешена, в UI действие скрыто.
 6. `GET /api/slots` отдаёт все слоты без пагинации.
 7. Язык интерфейса, сообщений API и README — русский.
-8. JavaScript вместо TypeScript, PHPUnit вместо Pest, SPA на Vite вместо Nuxt.
+8. JavaScript вместо TypeScript, PHPUnit вместо Pest, Nuxt 3 в режиме SPA (`ssr: false`) — выбор владельца, PrimeVue подключается плагином без `@primevue/nuxt-module`.

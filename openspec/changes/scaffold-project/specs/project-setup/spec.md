@@ -6,14 +6,14 @@
 ## ADDED Requirements
 
 ### Requirement: Repository layout
-Репозиторий SHALL содержать независимые каталоги `backend/` (Laravel) и `frontend/` (Vue 3 + Vite), каталог `openspec/` и корневой `README.md`.
+Репозиторий SHALL содержать независимые каталоги `backend/` (Laravel) и `frontend/` (Nuxt 3), каталог `openspec/` и корневой `README.md`.
 
 #### Scenario: Чистый клон
 - **WHEN** репозиторий клонирован и установлены PHP 8.2+, Composer и Node.js
 - **THEN** backend и frontend устанавливаются и запускаются командами из README независимо друг от друга
 
 ### Requirement: Supported stack versions
-Backend MUST работать на PHP 8.2 и выше и Laravel 11 и выше (выбран Laravel 12, требование `php ^8.2`). Frontend MUST использовать Vue 3, Composition API и `<script setup>`, а также PrimeVue 4.
+Backend MUST работать на PHP 8.2 и выше и Laravel 11 и выше (выбран Laravel 12, требование `php ^8.2`). Frontend MUST использовать Nuxt 3 (Vue 3), Composition API и `<script setup>`, а также PrimeVue 4. Nuxt SHALL работать в режиме SPA (`ssr: false`).
 
 #### Scenario: Версии зафиксированы
 - **WHEN** открыты `backend/composer.json` и `frontend/package.json`
@@ -51,5 +51,5 @@ Backend SHALL подключать `routes/api.php` (префикс `/api`) бе
 Frontend dev-сервер SHALL проксировать `/api` на backend (`http://localhost:8000`), чтобы в разработке не требовалась настройка CORS.
 
 #### Scenario: Запрос с frontend
-- **WHEN** страница, открытая на dev-сервере Vite, вызывает `/api/slots`
+- **WHEN** страница, открытая на dev-сервере Nuxt, вызывает `/api/slots`
 - **THEN** запрос доходит до backend на порту 8000

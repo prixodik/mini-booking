@@ -2,9 +2,9 @@
 
 ## 1. API и состояние
 
-- [ ] 1.1 `src/api/bookingApi.js`: `getSlots`, `createBooking`, `cancelBooking`, `ApiError` (status, message, errors)
-- [ ] 1.2 `src/utils/datetime.js`: форматирование даты/времени и ключа даты в поясе расписания
-- [ ] 1.3 `src/composables/useSlots.js`: загрузка, выбранная дата, `loading`/`submitting`, действия `book` / `cancel`, повтор последнего неудавшегося действия
+- [ ] 1.1 `utils/bookingApi.js`: `getSlots`, `createBooking`, `cancelBooking`, `ApiError` (status, message, errors)
+- [ ] 1.2 `utils/datetime.js`: форматирование даты/времени и ключа даты в поясе расписания
+- [ ] 1.3 `composables/useSlots.js`: загрузка, выбранная дата, `loading`/`submitting`, действия `book` / `cancel`, повтор последнего неудавшегося действия
 
 ## 2. Интерфейс
 
@@ -17,4 +17,4 @@
 ## 3. Проверка
 
 - [ ] 3.1 Вручную в браузере на 1280 px и 360 px: сценарии создания, отмены, 422, 409 (две вкладки), остановленный backend
-- [ ] 3.2 Проверить отсутствие `fetch` в `src/components`
+- [ ] 3.2 Проверить отсутствие `fetch` в `components/` и `app.vue`

@@ -8,7 +8,7 @@
 ## What Changes
 
 - Каталог `backend/` — Laravel 12 (PHP ^8.2), SQLite, API-роуты включены без Sanctum/авторизации.
-- Каталог `frontend/` — Vue 3 + Vite (SPA, JavaScript), PrimeVue 4, dev-прокси `/api` → backend.
+- Каталог `frontend/` — Nuxt 3 (режим SPA, JavaScript), PrimeVue 4, dev-прокси `/api` → backend через Nitro `devProxy`.
 - `backend/.env.example` с `APP_TIMEZONE`, `DB_CONNECTION=sqlite`, локализацией `ru`.
 - Единый JSON-формат ошибок для `/api/*`, независимо от заголовка `Accept`.
 - Скелет `README.md` (структура, процесс OpenSpec); полный README — в `add-tests-and-readme`.
@@ -24,4 +24,4 @@
 
 ## Impact
 
-Создаются `backend/` и `frontend/`; правятся `bootstrap/app.php`, `.env.example`, `vite.config.js`. Прикладной логики нет.
+Создаются `backend/` и `frontend/`; правятся `bootstrap/app.php`, `.env.example`, `nuxt.config.js`. Прикладной логики нет.

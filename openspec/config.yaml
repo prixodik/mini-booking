@@ -12,13 +12,13 @@ context: |
   Язык: артефакты OpenSpec, README, сообщения API и интерфейс — на русском.
   Структурные заголовки OpenSpec и ключевые слова SHALL/MUST — на английском.
 
-  Стек (зафиксировано ТЗ): PHP 8.2+, Laravel 11+, Vue 3 (Composition API, <script setup>),
-  БД SQLite/MySQL/PostgreSQL. Выбрано: Laravel 12, Vue 3 + Vite (SPA), PrimeVue 4,
+  Стек (зафиксировано ТЗ): PHP 8.2+, Laravel 11+, Vue 3 / Nuxt 3 (Composition API, <script setup>),
+  БД SQLite/MySQL/PostgreSQL. Выбрано: Laravel 12, Nuxt 3 (режим SPA, ssr: false), PrimeVue 4,
   SQLite, тесты на PHPUnit.
 
   Структура репозитория:
     backend/    — Laravel (JSON API, миграции, Seeder, тесты)
-    frontend/   — Vue 3 + Vite + PrimeVue (одна страница)
+    frontend/   — Nuxt 3 + PrimeVue (одна страница)
     openspec/   — спецификации и changes
     README.md   — запуск, настройки, описание уникальности брони и времени
 

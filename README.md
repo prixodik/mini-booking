@@ -9,7 +9,7 @@
 
 ```
 backend/     Laravel 12 — JSON API, миграции, Seeder, тесты (пока не создан)
-frontend/    Vue 3 + Vite + PrimeVue 4 — одна страница (пока не создан)
+frontend/    Nuxt 3 + PrimeVue 4 — одна страница (пока не создан)
 openspec/    спецификации и changes (spec-driven разработка)
 AGENTS.md    правило «spec first» и порядок реализации
 ```

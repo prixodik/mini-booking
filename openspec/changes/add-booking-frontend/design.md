@@ -15,15 +15,18 @@ Backend отдаёт плоский список слотов с `status`, `book
 ### Структура
 
 ```
-frontend/src/
-├── main.js                     PrimeVue + тема (Aura из @primeuix/themes) + Toast/Confirmation
-├── App.vue                     страница: заголовок, фильтр даты, список, диалоги
-├── api/bookingApi.js           fetch-обёртка: getSlots(), createBooking(), cancelBooking(); класс ApiError {status, message, errors}
-├── composables/useSlots.js     slots, timezone, selectedDate, loading, error, pending, actions
-├── components/SlotList.vue     список слотов выбранной даты
-├── components/BookingDialog.vue  форма имя/email, ошибки полей
-└── utils/datetime.js           форматирование в поясе расписания через Intl.DateTimeFormat({timeZone})
+frontend/                         Nuxt 3 (ssr: false)
+├── nuxt.config.js                ssr: false, nitro.devProxy для /api, css
+├── plugins/primevue.js           PrimeVue + тема Aura (@primeuix/themes) + ToastService + ConfirmationService
+├── app.vue                       страница: заголовок, фильтр даты, список, диалоги, <Toast/>, <ConfirmDialog/>
+├── utils/bookingApi.js           fetch-обёртка: getSlots(), createBooking(), cancelBooking(); класс ApiError {status, message, errors}
+├── utils/datetime.js             форматирование в поясе расписания через Intl.DateTimeFormat({timeZone})
+├── composables/useSlots.js       slots, timezone, selectedDate, loading, submitting, error, действия
+├── components/SlotList.vue       список слотов выбранной даты
+└── components/BookingDialog.vue  форма имя/email, ошибки полей
 ```
+
+Автоимпорт Nuxt подхватывает `composables/`, `utils/` и `components/`; импорты PrimeVue-компонентов в `.vue` — явные (`import Button from 'primevue/button'`), чтобы не зависеть от `@primevue/nuxt-module`. Запросы выполняются на клиенте (SPA), поэтому используется `$fetch`/`fetch` внутри `utils/bookingApi.js`, а не `useFetch` с SSR-кэшем.
 
 ### Компоненты PrimeVue
 
