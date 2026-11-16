@@ -17,6 +17,7 @@
           id="customer-name"
           v-model.trim="name"
           class="booking-dialog__input"
+          autofocus
           required
           autocomplete="name"
           :invalid="!!errors.name"
