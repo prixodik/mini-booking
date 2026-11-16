@@ -12,6 +12,13 @@
 - **WHEN** разработчик выполняет команды README последовательно на чистом клоне
 - **THEN** backend доступен на `http://localhost:8000`, frontend на адресе Nuxt dev-сервера, расписание заполнено
 
+### Requirement: Installation troubleshooting
+README SHALL описывать известные проблемы установки: долгий `composer install` без GitHub-токена (предупреждения «Could not authenticate against github.com», пакеты ставятся из исходников) с указанием, как задать токен (`composer config -g github-oauth.github.com <token>`), и ошибку «Filename too long» на Windows при длинном пути к проекту (короткий путь или `git config --global core.longpaths true`).
+
+#### Scenario: Медленная установка
+- **WHEN** разработчик видит сотню предупреждений «Could not authenticate against github.com» при `composer install`
+- **THEN** README объясняет причину и как задать токен
+
 ### Requirement: Environment settings
 README MUST описывать ключевые настройки `.env`: `APP_TIMEZONE`, `DB_CONNECTION` и путь SQLite-файла, `APP_LOCALE`.
 

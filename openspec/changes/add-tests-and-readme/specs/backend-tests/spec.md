@@ -33,6 +33,20 @@
 - **WHEN** выполняется `php artisan test` после `composer install` и копирования `.env.example`
 - **THEN** все тесты проходят, а рабочая SQLite-БД разработки не затрагивается
 
+### Requirement: Runs on a clean clone
+`php artisan test` SHALL завершаться успешно на чистом клоне репозитория без ручного создания каталогов. Наборы в `phpunit.xml` MUST ссылаться только на каталоги, которые есть в git.
+
+#### Scenario: Свежий клон
+- **WHEN** на свежем клоне после `composer install` и копирования `.env.example` выполняется `php artisan test`
+- **THEN** команда завершается кодом 0, ошибок «Test directory not found» нет
+
+### Requirement: Independent of local timezone setting
+Результат тестов MUST NOT зависеть от `APP_TIMEZONE` в `.env` и в окружении: `phpunit.xml` SHALL принудительно задавать `APP_TIMEZONE=Europe/Moscow`, а ожидаемые значения со смещением `+03:00` относятся к этому поясу.
+
+#### Scenario: Другой пояс в окружении
+- **WHEN** `php artisan test` запускается при `APP_TIMEZONE=UTC`, `Asia/Tokyo` или `America/Los_Angeles` в окружении
+- **THEN** все тесты проходят, как и при `Europe/Moscow`
+
 ### Requirement: Optional extra tests
 Дополнительные тесты SHALL NOT заменять два обязательных и MAY покрывать, если остаётся время: бронь прошедшего слота (409), валидацию (422, в том числе несуществующий `slot_id`), отмену с повторной бронью, идемпотентность Seeder. Их отсутствие не нарушает ТЗ.
 
