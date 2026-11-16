@@ -37,6 +37,15 @@ php artisan db:seed                   # расписание на 7 дней × 
 php artisan serve                     # http://localhost:8000
 ```
 
+### Если установка идёт долго или падает
+
+- **`composer install` долго стоит и печатает сотни предупреждений «Could not authenticate against github.com».**
+  Composer не может скачать архивы пакетов с GitHub из-за анонимного лимита запросов и ставит пакеты из исходников (`git clone`):
+  это работает, но занимает минуты (у нас ~5 минут). Чтобы ускорить, создайте на GitHub персональный токен доступа (без прав на запись)
+  и выполните один раз `composer config -g github-oauth.github.com <ваш_токен>`. Токен хранится только в вашей конфигурации Composer, в репозиторий его не добавляйте.
+- **Ошибка «Filename too long» на Windows** (например, при установке `league/commonmark`) возникает при длинном пути к проекту.
+  Клонируйте репозиторий в короткий путь (например, `D:\mb`) или выполните `git config --global core.longpaths true`.
+
 ### Настройки `.env`
 
 | Переменная | Значение по умолчанию | Назначение |
@@ -57,7 +66,8 @@ php artisan test
 ```
 
 Тесты идут на SQLite in-memory и не трогают рабочую БД. Время в тестах фиксируется (`Carbon::setTestNow`),
-поэтому результат не зависит от времени суток. Два обязательных теста — в `tests/Feature/BookingApiTest.php`
+поэтому результат не зависит от времени суток, а часовой пояс `Europe/Moscow` задан в `phpunit.xml` принудительно,
+поэтому `APP_TIMEZONE` в `.env` или в окружении на тесты не влияет. Два обязательных теста — в `tests/Feature/BookingApiTest.php`
 (`test_books_free_future_slot`, `test_second_request_for_taken_slot_returns_409_and_creates_no_booking`),
 остальные — дополнительные (валидация, прошедший слот, отмена, Seeder, список слотов).
 

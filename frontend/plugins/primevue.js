@@ -47,6 +47,18 @@ const MiniBookingPreset = definePreset(Aura, {
     },
   },
   components: {
+    toast: {
+      colorScheme: {
+        light: {
+          // Заголовок, иконка и кнопка закрытия тоста: у Aura (500/600-е оттенки) контраст к фону тоста ниже 4.5:1
+          // (success 3.16, warn 2.85, error 4.43). Берём более тёмные оттенки палитры Aura (расчёт — в design.md).
+          success: { color: '{green.800}', closeButton: { focusRing: { color: '{green.800}' } } },
+          info: { color: '{blue.700}', closeButton: { focusRing: { color: '{blue.700}' } } },
+          warn: { color: '{yellow.800}', closeButton: { focusRing: { color: '{yellow.800}' } } },
+          error: { color: '{red.700}', closeButton: { focusRing: { color: '{red.700}' } } },
+        },
+      },
+    },
     button: {
       colorScheme: {
         light: {
