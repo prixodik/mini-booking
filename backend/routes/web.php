@@ -2,6 +2,5 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Backend — только JSON API; интерфейс — во frontend/.
+Route::get('/', fn () => response()->json(['name' => 'Mini Booking API', 'slots' => url('/api/slots')]));
