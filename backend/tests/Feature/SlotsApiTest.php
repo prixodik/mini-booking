@@ -74,6 +74,27 @@ class SlotsApiTest extends TestCase
         $this->assertEmpty(array_filter($data, fn ($slot) => str_starts_with($slot['starts_at'], '2026-01-05')));
     }
 
+    public function test_default_factory_booking_marks_slot_booked_and_cancelled_one_does_not(): void
+    {
+        $tz = config('app.timezone');
+        $bookedSlot = Slot::where('starts_at', Slot::toDbValue(Carbon::parse('2026-01-05 12:00', $tz)))->first();
+        $freeSlot = Slot::where('starts_at', Slot::toDbValue(Carbon::parse('2026-01-05 13:00', $tz)))->first();
+
+        $active = Booking::factory()->forSlot($bookedSlot)->create();
+        $cancelled = Booking::factory()->forSlot($freeSlot)->cancelled()->create();
+
+        $this->assertSame($bookedSlot->id, $active->active_slot_id);
+        $this->assertNull($active->cancelled_at);
+        $this->assertNull($cancelled->active_slot_id);
+        $this->assertNotNull($cancelled->cancelled_at);
+
+        $rows = collect($this->getJson('/api/slots')->json('data'))->keyBy('id');
+        $this->assertSame('booked', $rows[$bookedSlot->id]['status']);
+        $this->assertSame($active->id, $rows[$bookedSlot->id]['booking_id']);
+        $this->assertSame('available', $rows[$freeSlot->id]['status']);
+        $this->assertNull($rows[$freeSlot->id]['booking_id']);
+    }
+
     public function test_cancelled_booking_makes_future_slot_available_again(): void
     {
         $slot = Slot::where('starts_at', Slot::toDbValue(Carbon::parse('2026-01-05 12:00', config('app.timezone'))))->first();

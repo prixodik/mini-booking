@@ -64,9 +64,9 @@ class Slot extends Model
         return $this->hasMany(Booking::class);
     }
 
-    /** Активная (не отменённая) бронь; по БД их не больше одной. */
+    /** Активная бронь: у неё active_slot_id = id слота; UNIQUE-индекс гарантирует, что такая одна. */
     public function activeBooking(): HasOne
     {
-        return $this->hasOne(Booking::class)->whereNull('cancelled_at');
+        return $this->hasOne(Booking::class, 'active_slot_id');
     }
 }
