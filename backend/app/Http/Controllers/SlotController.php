@@ -10,7 +10,11 @@ class SlotController extends Controller
     /** GET /api/slots */
     public function index()
     {
-        $slots = Slot::with('activeBooking')->orderBy('starts_at')->get();
+        // С начала сегодняшнего дня по времени расписания: прошедшие слоты сегодня нужны (ТЗ), прошлые дни — нет.
+        $slots = Slot::with('activeBooking')
+            ->startingFrom(now()->startOfDay())
+            ->orderBy('starts_at')
+            ->get();
 
         return SlotResource::collection($slots)->additional([
             'meta' => [

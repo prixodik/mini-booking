@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -44,6 +45,12 @@ class Slot extends Model
             get: fn (string $value) => Carbon::parse($value, 'UTC')->setTimezone(config('app.timezone')),
             set: fn ($value) => self::toDbValue($value),
         );
+    }
+
+    /** Слоты, начинающиеся не раньше $moment. starts_at хранится в UTC, поэтому момент переводится через toDbValue(). */
+    public function scopeStartingFrom(Builder $query, \DateTimeInterface $moment): Builder
+    {
+        return $query->where('starts_at', '>=', self::toDbValue($moment));
     }
 
     /** Слот прошёл, если он начался в текущий момент или раньше. */

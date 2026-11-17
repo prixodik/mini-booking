@@ -55,6 +55,25 @@ class SlotsApiTest extends TestCase
         $this->assertStringNotContainsString('Секрет', $response->getContent());
     }
 
+    public function test_returns_slots_from_start_of_today_only(): void
+    {
+        $tz = config('app.timezone');
+        // setUp засеял расписание 5 января; на следующий день Seeder запускается снова.
+        Carbon::setTestNow(Carbon::parse('2026-01-06 08:00:00', $tz));
+        $this->seed(SlotSeeder::class);
+        Carbon::setTestNow(Carbon::parse('2026-01-06 10:30:00', $tz));
+
+        $data = $this->getJson('/api/slots')->assertOk()->json('data');
+
+        $this->assertCount(63, $data);
+        $this->assertSame('2026-01-06T09:00:00+03:00', $data[0]['starts_at']);
+        $this->assertSame('2026-01-12T18:00:00+03:00', end($data)['ends_at']);
+        $this->assertSame('past', $data[0]['status']);
+        $this->assertSame('past', $data[1]['status']);
+        $this->assertSame('available', $data[2]['status']);
+        $this->assertEmpty(array_filter($data, fn ($slot) => str_starts_with($slot['starts_at'], '2026-01-05')));
+    }
+
     public function test_cancelled_booking_makes_future_slot_available_again(): void
     {
         $slot = Slot::where('starts_at', Slot::toDbValue(Carbon::parse('2026-01-05 12:00', config('app.timezone'))))->first();
