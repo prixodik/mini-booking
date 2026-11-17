@@ -65,7 +65,8 @@ return [
     |
     */
 
-    'timezone' => env('APP_TIMEZONE', 'UTC'),
+    // Зафиксирован: в БД и в логах всегда UTC. Пояс расписания — config('booking.timezone') (BOOKING_TIMEZONE).
+    'timezone' => 'UTC',
 
     /*
     |--------------------------------------------------------------------------

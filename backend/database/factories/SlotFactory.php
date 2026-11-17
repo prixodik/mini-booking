@@ -13,19 +13,19 @@ class SlotFactory extends Factory
 
     public function definition(): array
     {
-        $start = Carbon::tomorrow(config('app.timezone'))->setTime(9, 0);
+        $start = Carbon::tomorrow(config('booking.timezone'))->setTime(9, 0)->utc();
 
         return [
-            'starts_at' => $start,
-            'ends_at' => $start->copy()->addHour(),
+            'starts_at' => $start->copy()->utc(),
+            'ends_at' => $start->copy()->addHour()->utc(),
         ];
     }
 
     public function startingAt(Carbon $start): static
     {
         return $this->state(fn () => [
-            'starts_at' => $start,
-            'ends_at' => $start->copy()->addHour(),
+            'starts_at' => $start->copy()->utc(),
+            'ends_at' => $start->copy()->addHour()->utc(),
         ]);
     }
 }

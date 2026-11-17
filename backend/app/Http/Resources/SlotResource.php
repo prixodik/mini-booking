@@ -14,8 +14,8 @@ class SlotResource extends JsonResource
         return [
             'id' => $this->id,
             // ISO 8601 с UTC-смещением часового пояса расписания, например 2026-11-16T09:00:00+03:00.
-            'starts_at' => $this->starts_at->toIso8601String(),
-            'ends_at' => $this->ends_at->toIso8601String(),
+            'starts_at' => $this->starts_at->copy()->setTimezone(config('booking.timezone'))->toIso8601String(),
+            'ends_at' => $this->ends_at->copy()->setTimezone(config('booking.timezone'))->toIso8601String(),
             'status' => $this->status(),
             // ID активной брони (имя и email клиента в список слотов не попадают).
             'booking_id' => $this->activeBooking?->id,

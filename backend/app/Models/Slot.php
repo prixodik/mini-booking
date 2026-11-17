@@ -2,55 +2,38 @@
 
 namespace App\Models;
 
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Carbon;
 
 /**
  * Часовой слот переговорной.
  *
- * Время хранится в БД в UTC, а наружу отдаётся в часовом поясе расписания
- * (config('app.timezone')). Поэтому смена APP_TIMEZONE не портит сохранённые слоты.
+ * starts_at/ends_at хранятся в БД в UTC, как и все остальные даты (config('app.timezone') = UTC),
+ * поэтому обычный where('starts_at', '>', now()) работает верно. Пояс расписания (config('booking.timezone'))
+ * нужен только для построения сетки 09:00–18:00 и для вывода времени клиенту.
+ *
+ * Запись: Laravel форматирует Carbon в его собственном поясе, не переводя в UTC, поэтому не-UTC момент
+ * перед записью приводите через ->utc(). Слоты пишет только SlotSeeder.
  */
 class Slot extends Model
 {
     use HasFactory;
 
-    public const DB_FORMAT = 'Y-m-d H:i:s';
-
     protected $fillable = ['starts_at', 'ends_at'];
 
-    public static function toDbValue(\DateTimeInterface|string $moment): string
+    protected function casts(): array
     {
-        return Carbon::parse($moment)->utc()->format(self::DB_FORMAT);
+        return ['starts_at' => 'datetime', 'ends_at' => 'datetime'];
     }
 
-    protected function startsAt(): Attribute
+    /** Слоты, начинающиеся не раньше $moment. Момент может быть в любом поясе: в запрос он уходит в UTC. */
+    public function scopeStartingFrom(Builder $query, CarbonInterface $moment): Builder
     {
-        return $this->utcAttribute();
-    }
-
-    protected function endsAt(): Attribute
-    {
-        return $this->utcAttribute();
-    }
-
-    private function utcAttribute(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $value) => Carbon::parse($value, 'UTC')->setTimezone(config('app.timezone')),
-            set: fn ($value) => self::toDbValue($value),
-        );
-    }
-
-    /** Слоты, начинающиеся не раньше $moment. starts_at хранится в UTC, поэтому момент переводится через toDbValue(). */
-    public function scopeStartingFrom(Builder $query, \DateTimeInterface $moment): Builder
-    {
-        return $query->where('starts_at', '>=', self::toDbValue($moment));
+        return $query->where('starts_at', '>=', $moment->copy()->utc());
     }
 
     /** Слот прошёл, если он начался в текущий момент или раньше. */

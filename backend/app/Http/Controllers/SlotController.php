@@ -10,16 +10,17 @@ class SlotController extends Controller
     /** GET /api/slots */
     public function index()
     {
+        $timezone = config('booking.timezone');
         // С начала сегодняшнего дня по времени расписания: прошедшие слоты сегодня нужны (ТЗ), прошлые дни — нет.
         $slots = Slot::with('activeBooking')
-            ->startingFrom(now()->startOfDay())
+            ->startingFrom(now($timezone)->startOfDay())
             ->orderBy('starts_at')
             ->get();
 
         return SlotResource::collection($slots)->additional([
             'meta' => [
-                'timezone' => config('app.timezone'),
-                'server_time' => now()->toIso8601String(),
+                'timezone' => $timezone,
+                'server_time' => now($timezone)->toIso8601String(),
             ],
         ]);
     }

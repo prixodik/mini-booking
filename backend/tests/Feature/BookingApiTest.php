@@ -18,20 +18,14 @@ class BookingApiTest extends TestCase
         parent::setUp();
 
         // Время фиксируем: утро рабочего дня, чтобы будущий свободный слот был при любом реальном времени запуска.
-        Carbon::setTestNow(Carbon::parse('2026-01-05 08:00:00', config('app.timezone')));
+        $this->setScheduleNow('2026-01-05 08:00');
         $this->seed(SlotSeeder::class);
-    }
-
-    protected function tearDown(): void
-    {
-        Carbon::setTestNow();
-        parent::tearDown();
     }
 
     private function futureSlot(): Slot
     {
         // Сегодня 10:00 по времени расписания: сейчас 08:00, слот в будущем.
-        return Slot::where('starts_at', Slot::toDbValue(Carbon::parse('2026-01-05 10:00', config('app.timezone'))))->firstOrFail();
+        return $this->slotAt('2026-01-05 10:00');
     }
 
     private function payload(Slot $slot, array $overrides = []): array
@@ -79,7 +73,7 @@ class BookingApiTest extends TestCase
     public function test_booking_a_past_slot_returns_409(): void
     {
         $past = $this->futureSlot(); // сегодня 10:00
-        Carbon::setTestNow(Carbon::parse('2026-01-05 10:30:00', config('app.timezone'))); // слот уже начался
+        $this->setScheduleNow('2026-01-05 10:30'); // слот уже начался
 
         $this->postJson('/api/bookings', $this->payload($past))->assertStatus(409);
 

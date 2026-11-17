@@ -16,9 +16,9 @@
     </source>
     <php>
         <env name="APP_ENV" value="testing"/>
-        <!-- Тесты ждут смещение +03:00: пояс задаётся принудительно и не зависит от .env и окружения. -->
-        <env name="APP_TIMEZONE" value="Europe/Moscow" force="true"/>
-        <server name="APP_TIMEZONE" value="Europe/Moscow" force="true"/>
+        <!-- Тесты ждут смещение +03:00: пояс расписания задаётся принудительно и не зависит от .env и окружения. -->
+        <env name="BOOKING_TIMEZONE" value="Europe/Moscow" force="true"/>
+        <server name="BOOKING_TIMEZONE" value="Europe/Moscow" force="true"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="BROADCAST_CONNECTION" value="null"/>

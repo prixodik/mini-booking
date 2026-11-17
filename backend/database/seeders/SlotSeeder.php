@@ -17,14 +17,14 @@ class SlotSeeder extends Seeder
 {
     public function run(): void
     {
-        $timezone = config('app.timezone');
+        $timezone = config('booking.timezone');
         $openHour = config('booking.open_hour');
         $closeHour = config('booking.close_hour');
         $minutes = config('booking.slot_minutes');
         $days = config('booking.days_ahead');
 
         $today = now($timezone)->startOfDay();
-        $nowUtc = Slot::toDbValue(now());
+        $nowUtc = now()->toDateTimeString();
         $rows = [];
 
         for ($day = 0; $day < $days; $day++) {
@@ -36,8 +36,8 @@ class SlotSeeder extends Seeder
             while ($start->lessThan($close)) {
                 $end = $start->copy()->addMinutes($minutes);
                 $rows[] = [
-                    'starts_at' => Slot::toDbValue($start),
-                    'ends_at' => Slot::toDbValue($end),
+                    'starts_at' => $start->copy()->utc()->toDateTimeString(),
+                    'ends_at' => $end->copy()->utc()->toDateTimeString(),
                     'created_at' => $nowUtc,
                     'updated_at' => $nowUtc,
                 ];
