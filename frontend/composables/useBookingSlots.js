@@ -23,12 +23,16 @@ export function useBookingSlots() {
     slots.value.filter((s) => dateKey(s.starts_at, timezone.value) === selectedDate.value),
   )
 
+  let loadSeq = 0 // номер последней запущенной загрузки; применяется только её результат
+
   /** Загружает расписание целиком; фильтр по дате работает на клиенте. */
   async function load({ silent = false } = {}) {
+    const seq = ++loadSeq
     if (!silent) loading.value = true
     loadError.value = null
     try {
       const response = await getSlots()
+      if (seq !== loadSeq) return false // пришёл ответ на устаревший запрос
       slots.value = response.data
       timezone.value = response.meta.timezone
       if (!dates.value.includes(selectedDate.value)) {
@@ -37,10 +41,10 @@ export function useBookingSlots() {
       }
       return true
     } catch (error) {
-      loadError.value = error.message
+      if (seq === loadSeq) loadError.value = error.message
       return false
     } finally {
-      loading.value = false
+      if (seq === loadSeq) loading.value = false
     }
   }
 
@@ -52,6 +56,11 @@ export function useBookingSlots() {
       await load({ silent: true })
       return { status: 'ok' }
     } catch (error) {
+      if (error.isValidation && error.errors?.slot_id) {
+        // Слота больше нет: ошибка не в полях формы, а в устаревшем списке — ведём себя как при 409.
+        await load({ silent: true })
+        return { status: 'conflict', message: error.errors.slot_id[0] }
+      }
       if (error.isValidation) {
         return { status: 'validation', message: error.message, errors: error.errors ?? {} }
       }
@@ -60,6 +69,8 @@ export function useBookingSlots() {
         await load({ silent: true })
         return { status: error.isConflict ? 'conflict' : 'notfound', message: error.message }
       }
+      // Таймаут: запрос мог выполниться на сервере, поэтому показываем актуальный список до повтора.
+      if (error.isTimeout) await load({ silent: true })
       return { status: 'error', message: error.message }
     } finally {
       submitting.value = false

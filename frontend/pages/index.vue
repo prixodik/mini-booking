@@ -82,7 +82,6 @@ async function submitBooking(form) {
     toast.add({ severity: 'success', summary: 'Слот забронирован', life: 4000 })
   } else if (result.status === 'validation') {
     serverErrors.value = result.errors
-    if (result.errors.slot_id) generalError.value = result.errors.slot_id[0]
   } else if (result.status === 'conflict') {
     dialogVisible.value = false
     toast.add({ severity: 'warn', summary: 'Не удалось забронировать', detail: result.message, life: 6000 })
