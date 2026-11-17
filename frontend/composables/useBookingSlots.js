@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue'
 import { getSlots, createBooking, cancelBooking } from '~/services/bookingApi'
+import { dateKey } from '~/utils/datetime'
 
 /**
  * Состояние страницы бронирования: загрузка расписания, фильтр по дате, создание и отмена броней.
@@ -13,6 +14,7 @@ export function useBookingSlots() {
   const selectedDate = ref(null)
   const loading = ref(false) // загрузка списка
   const submitting = ref(false) // выполняется создание или отмена
+  const cancellingSlotId = ref(null) // слот, бронь которого сейчас отменяется
   const loadError = ref(null) // сообщение, если список не загрузился
 
   const dates = computed(() => [...new Set(slots.value.map((s) => dateKey(s.starts_at, timezone.value)))].sort())
@@ -66,7 +68,19 @@ export function useBookingSlots() {
 
   const book = (slot, { name, email }) => run(() => createBooking({ slotId: slot.id, name, email }))
 
-  const cancel = (slot) => run(() => cancelBooking(slot.booking_id))
+  /** Отменяет бронь слота; пока идёт запрос, cancellingSlotId указывает на этот слот (спиннер на его кнопке). */
+  async function cancel(slot) {
+    if (submitting.value) return { status: 'busy' }
+    cancellingSlotId.value = slot.id
+    try {
+      return await run(() => cancelBooking(slot.booking_id))
+    } finally {
+      cancellingSlotId.value = null
+    }
+  }
 
-  return { slots, timezone, dates, selectedDate, slotsOfDay, loading, submitting, loadError, load, book, cancel }
+  return {
+    slots, timezone, dates, selectedDate, slotsOfDay, loading, submitting, cancellingSlotId, loadError,
+    load, book, cancel,
+  }
 }

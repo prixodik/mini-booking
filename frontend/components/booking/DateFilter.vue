@@ -17,6 +17,9 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { formatDateLabel } from '~/utils/datetime'
+
 const props = defineProps({
   modelValue: { type: String, default: null },
   dates: { type: Array, required: true }, // ['2026-01-05', ...]

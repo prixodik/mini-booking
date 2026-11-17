@@ -1,3 +1,4 @@
+import { defineNuxtPlugin } from '#app'
 import PrimeVue from 'primevue/config'
 import ToastService from 'primevue/toastservice'
 import ConfirmationService from 'primevue/confirmationservice'

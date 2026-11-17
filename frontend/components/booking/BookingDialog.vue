@@ -4,6 +4,7 @@
     modal
     header="Бронирование слота"
     :closable="!loading"
+    :close-on-escape="!loading"
     :style="{ width: '26rem' }"
     :breakpoints="{ '575px': 'calc(100vw - 32px)' }"
     @show="focusName"
@@ -67,9 +68,11 @@
 </template>
 
 <script setup>
+import { ref, computed, watch } from 'vue'
 import Dialog from 'primevue/dialog'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
+import { dateKey, formatTime, formatDateLabel } from '~/utils/datetime'
 
 const props = defineProps({
   visible: { type: Boolean, default: false },

@@ -5,6 +5,10 @@ export default defineNuxtConfig({
   // SSR не нужен (см. openspec/changes/scaffold-project/design.md).
   ssr: false,
   devtools: { enabled: false },
+  // Явные импорты: всё, что использует файл, видно в его import (проще читать и править).
+  // Встроенные NuxtLayout и NuxtPage остаются доступны без импорта.
+  imports: { autoImport: false },
+  components: { dirs: [] },
   css: [
     'primeicons/primeicons.css',
     // Шрифт Nunito Sans из node_modules (400/600/700), без обращения к CDN. Берём общие файлы весов (400.css и т.д.):

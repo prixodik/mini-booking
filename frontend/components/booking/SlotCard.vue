@@ -25,6 +25,7 @@
         label="Отменить бронь"
         severity="danger"
         outlined
+        :loading="cancelling"
         :disabled="busy"
         @click="emit('cancel', item)"
       />
@@ -35,11 +36,13 @@
 <script setup>
 import { computed } from 'vue'
 import Button from 'primevue/button'
+import { formatTime } from '~/utils/datetime'
 
 const props = defineProps({
   item: { type: Object, required: true }, // слот из GET /api/slots
   timezone: { type: String, required: true },
   busy: { type: Boolean, default: false }, // блокирует действия, пока выполняется запрос
+  cancelling: { type: Boolean, default: false }, // спиннер на кнопке «Отменить бронь»: идёт отмена этой брони
 })
 const emit = defineEmits(['book', 'cancel'])
 

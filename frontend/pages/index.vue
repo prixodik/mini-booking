@@ -1,7 +1,7 @@
 <template>
   <section class="page">
     <div class="page__panel">
-      <BookingDateFilter v-model="selectedDate" :dates="dates" :disabled="loading" />
+      <DateFilter v-model="selectedDate" :dates="dates" :disabled="loading" />
     </div>
 
     <div v-if="loadError" class="page__alert" role="alert">
@@ -14,11 +14,12 @@
       <span>Загружаем расписание…</span>
     </div>
 
-    <BookingSlotList
+    <SlotList
       v-else-if="slotsOfDay.length"
       :slots="slotsOfDay"
       :timezone="timezone"
       :busy="submitting"
+      :cancelling-slot-id="cancellingSlotId"
       @book="openBooking"
       @cancel="askCancel"
     />
@@ -39,15 +40,23 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import Button from 'primevue/button'
 import ProgressSpinner from 'primevue/progressspinner'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
+import DateFilter from '~/components/booking/DateFilter.vue'
+import SlotList from '~/components/booking/SlotList.vue'
+import BookingDialog from '~/components/booking/BookingDialog.vue'
+import { useBookingSlots } from '~/composables/useBookingSlots'
 
 const toast = useToast()
 const confirm = useConfirm()
 
-const { slots, timezone, dates, selectedDate, slotsOfDay, loading, submitting, loadError, load, book, cancel } = useBookingSlots()
+const {
+  slots, timezone, dates, selectedDate, slotsOfDay, loading, submitting, cancellingSlotId, loadError,
+  load, book, cancel,
+} = useBookingSlots()
 
 const dialogVisible = ref(false)
 const activeSlot = ref(null)

@@ -14,7 +14,7 @@ Backend — Laravel 12 (JSON API), frontend — Nuxt 3 (SPA) + PrimeVue 4, БД 
 
 ```
 backend/     Laravel 12: API, миграции, Seeder, тесты
-frontend/    Nuxt 3 (SPA): pages/, layouts/, components/booking/, composables/, services/, utils/, plugins/
+frontend/    Nuxt 3 (SPA): pages/, layouts/, components/booking/, composables/, services/, utils/, plugins/; автоимпорт Nuxt выключен, все импорты явные
 openspec/    спецификации и changes (разработка по принципу spec first)
 AGENTS.md    правило «spec first» и порядок changes
 ```
