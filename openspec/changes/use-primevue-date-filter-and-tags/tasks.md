@@ -8,7 +8,7 @@
 
 ## 2. Данные фильтра
 
-- [ ] 2.1 `utils/datetime.js`: `formatDateLong(key)` («Вторник, 17 ноября»); `useBookingSlots.js`: `dates` только `>= today` по `meta.server_time` (хранить `today` в `ref`), выбор по умолчанию не меняется — сценарии «Прошедшие дни не показываются», «Смена даты»
+- [ ] 2.1 `utils/datetime.js`: `formatDateLong(key)` («Вторник, 17 ноября»); убедиться, что change `slots-from-today` уже реализован (даты только с сегодня приходят из API, `useBookingSlots.js` не меняется) — сценарии «Прошедшие дни не показываются», «Смена даты»
 
 ## 3. Компоненты
 

@@ -31,7 +31,7 @@
 ## Impact
 
 `frontend/components/booking/DateFilter.vue`, `frontend/components/booking/SlotCard.vue`, `frontend/pages/index.vue`
-(заголовок даты), `frontend/composables/useBookingSlots.js` (список дат), `frontend/plugins/primevue.js` (токены
+(заголовок даты), `frontend/plugins/primevue.js` (токены
 `togglebutton`, `tag`), `frontend/assets/css/tokens.css` (удаление токенов статусов), README (раздел «Оформление»).
 Логика бронирования, API и backend не затрагиваются. Зависит от `add-booking-frontend` и `redesign-booking-ui`.
 
@@ -43,7 +43,7 @@
 
 Требуют подтверждения Alex (рекомендации в `design.md`):
 
-1. В фильтре только сегодня и будущие даты (рекомендуется; иначе после нескольких запусков Seeder кнопок больше 7 и они не помещаются в строку).
+1. В фильтре только сегодня и будущие даты (рекомендуется; иначе после нескольких запусков Seeder кнопок больше 7 и они не помещаются в строку). Реализуется на backend change `slots-from-today` (Ж-2, одобрен Alex к проработке).
 2. Выбранная дата выделяется фиолетовым акцентом, как сейчас (рекомендуется), а не стандартным для Aura белым «чипом» на сером фоне.
 3. Цвета `Tag`: оставить текущие тёмные оттенки (`green.800`, `orange.800`, контраст 6.49 и 6.38) двумя токенами в пресете (рекомендуется)
    или взять значения Aura по умолчанию (`green.700`, `orange.700`, контраст 4.57 и 4.52, впритык к 4.5).
