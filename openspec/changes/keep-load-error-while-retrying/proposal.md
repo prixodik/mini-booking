@@ -30,6 +30,7 @@
 ## Decisions of Alex
 
 - Исправить находку (сообщение в треде, 17.11.2026).
+- Change одобрен Alex 17.11.2026.
 
 ## Open Questions
 

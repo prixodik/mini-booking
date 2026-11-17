@@ -29,10 +29,10 @@ export function useBookingSlots() {
   async function load({ silent = false } = {}) {
     const seq = ++loadSeq
     if (!silent) loading.value = true
-    loadError.value = null
     try {
       const response = await getSlots()
       if (seq !== loadSeq) return false // пришёл ответ на устаревший запрос
+      loadError.value = null // сообщение об ошибке убираем только после успешного ответа
       slots.value = response.data
       timezone.value = response.meta.timezone
       if (!dates.value.includes(selectedDate.value)) {
