@@ -7,7 +7,7 @@
 | 1. Одна комната, 09:00–18:00 каждый день, включая выходные; часовые слоты; один активный слот на бронь | 9 слотов в день, без исключения выходных; одна активная бронь | `schedule` (Daily slot grid), `booking-integrity` (One active booking per slot…) |
 | 1. Вне объёма: авторизация, комнаты, админка, Scheduler/cron | Явно в Non-Goals / «Вне объёма» | `scaffold-project`, `add-data-model-and-seeding`, `add-bookings-api` (proposal) |
 | 2. Миграции слотов и бронирований; структура и хранение отмен на выбор автора | `slots`, `bookings`, мягкая отмена `cancelled_at` | `add-data-model-and-seeding` (design, `booking-integrity`) |
-| 2. Seeder: 7 дней включая сегодня × 9, часовой пояс Laravel, слоты начала дня как прошедшие | 63 слота, `app.timezone`, прошедшие создаются | `schedule` (Seeder creates seven calendar days, Schedule timezone) |
+| 2. Seeder: 7 дней включая сегодня × 9, часовой пояс Laravel, слоты начала дня как прошедшие | 63 слота в поясе `booking.timezone`, прошедшие создаются, даты в БД в UTC | `schedule` (Seeder creates seven calendar days, Schedule timezone) |
 | 2. Повторный запуск без дубликатов; в другой день добавляет недостающее, старое сохраняет | Идемпотентность, расширение окна | `schedule` (Seeder is idempotent, Seeder extends schedule…) |
 | 3. `GET /api/slots`: сортировка, ID, начало/конец с поясом, статус, ID активной брони, без имени/email | Поля, формат ISO 8601 со смещением, без ПДн | `slots-api` (List slots, Slot representation, No personal data) |
 | 3. Прошедший слот: `starts_at <= now` | `past` при `starts_at <= now` | `schedule` (Past slot definition), `slots-api` (Slot status) |
@@ -29,7 +29,7 @@
 ## Допущения, не заданные ТЗ (требуют согласования)
 
 1. Laravel 12 (ТЗ: 11+), PHP ^8.2.
-2. `APP_TIMEZONE=Europe/Moscow` в `.env.example` (ТЗ пояс не называет).
+2. `BOOKING_TIMEZONE=Europe/Moscow` в `.env.example` (ТЗ пояс не называет). `app.timezone` зафиксирован в UTC.
 3. Статус `past` приоритетнее `booked`; `booking_id` для прошедшего слота остаётся.
 4. Повторная отмена → 404 «Бронь уже отменена», неизвестный ID → 404 «Бронь не найдена» (решение владельца; ТЗ допускает 204 или 404).
 5. Отмена брони начавшегося слота на backend разрешена, в UI действие скрыто.

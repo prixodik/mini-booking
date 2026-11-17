@@ -4,7 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Slot;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use RuntimeException;
 
 /**
  * Создаёт расписание на N календарных дней (по умолчанию 7), считая сегодня.
@@ -45,6 +46,28 @@ class SlotSeeder extends Seeder
             }
         }
 
-        Slot::query()->insertOrIgnore($rows);
+        DB::transaction(function () use ($timezone, $openHour, $closeHour, $minutes, $rows): void {
+            $this->assertScheduleMatchesTimezone($timezone, $openHour, $closeHour, $minutes);
+            Slot::query()->insertOrIgnore($rows);
+        });
+    }
+
+    private function assertScheduleMatchesTimezone(string $timezone, int $openHour, int $closeHour, int $minutes): void
+    {
+        $openMinute = $openHour * 60;
+        $closeMinute = $closeHour * 60;
+
+        foreach (Slot::query()->pluck('starts_at') as $startsAt) {
+            $local = $startsAt->setTimezone($timezone);
+            $minuteOfDay = $local->hour * 60 + $local->minute;
+
+            if ($minuteOfDay < $openMinute || $minuteOfDay >= $closeMinute
+                || ($minuteOfDay - $openMinute) % $minutes !== 0 || $local->second !== 0) {
+                throw new RuntimeException(
+                    "В БД уже есть слот {$local->toDateTimeString()} ({$timezone}) вне сетки {$openHour}:00–{$closeHour}:00. "
+                    .'Проверьте BOOKING_TIMEZONE и часы работы. Для пересоздания демо-базы выполните: php artisan migrate:fresh --seed'
+                );
+            }
+        }
     }
 }

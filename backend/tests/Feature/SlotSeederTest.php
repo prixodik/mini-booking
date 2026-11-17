@@ -6,12 +6,46 @@ use App\Models\Booking;
 use App\Models\Slot;
 use Database\Seeders\SlotSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Carbon;
+use RuntimeException;
 use Tests\TestCase;
 
 class SlotSeederTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_model_normalizes_slot_dates_to_utc(): void
+    {
+        $start = now('Europe/Moscow')->setDate(2026, 1, 5)->setTime(9, 0);
+        $slot = Slot::create([
+            'starts_at' => $start,
+            'ends_at' => '2026-01-05T10:00:00+03:00',
+        ]);
+
+        $this->assertDatabaseHas('slots', [
+            'id' => $slot->id,
+            'starts_at' => '2026-01-05 06:00:00',
+            'ends_at' => '2026-01-05 07:00:00',
+        ]);
+        $this->assertSame('+03:00', $start->format('P'));
+    }
+
+    public function test_seeder_refuses_schedule_after_timezone_change(): void
+    {
+        $this->setScheduleNow('2026-01-05 08:00');
+        $this->seed(SlotSeeder::class);
+        $starts = Slot::orderBy('id')->pluck('starts_at')->all();
+
+        config(['booking.timezone' => 'Asia/Novosibirsk']);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('php artisan migrate:fresh --seed');
+
+        try {
+            $this->seed(SlotSeeder::class);
+        } finally {
+            $this->assertEquals($starts, Slot::orderBy('id')->pluck('starts_at')->all());
+        }
+    }
 
     public function test_creates_seven_days_of_nine_slots_including_past_slots_of_today(): void
     {

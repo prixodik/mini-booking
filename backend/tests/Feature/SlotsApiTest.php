@@ -121,5 +121,14 @@ class SlotsApiTest extends TestCase
         // 09:00 Москвы = 06:00 UTC; бронь создана в 08:15 Москвы = 05:15 UTC.
         $this->assertSame('2026-01-05 06:00:00', DB::table('slots')->where('id', $slot->id)->value('starts_at'));
         $this->assertSame('2026-01-05 05:15:00', DB::table('bookings')->where('id', $id)->value('created_at'));
+
+        $this->setScheduleNow('2026-01-05 08:30');
+        $this->deleteJson("/api/bookings/{$id}")->assertNoContent();
+        $this->assertDatabaseHas('bookings', [
+            'id' => $id,
+            'created_at' => '2026-01-05 05:15:00',
+            'updated_at' => '2026-01-05 05:30:00',
+            'cancelled_at' => '2026-01-05 05:30:00',
+        ]);
     }
 }

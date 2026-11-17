@@ -14,10 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  *
  * starts_at/ends_at хранятся в БД в UTC, как и все остальные даты (config('app.timezone') = UTC),
  * поэтому обычный where('starts_at', '>', now()) работает верно. Пояс расписания (config('booking.timezone'))
- * нужен только для построения сетки 09:00–18:00 и для вывода времени клиенту.
- *
- * Запись: Laravel форматирует Carbon в его собственном поясе, не переводя в UTC, поэтому не-UTC момент
- * перед записью приводите через ->utc(). Слоты пишет только SlotSeeder.
+ * нужен для расчёта расписания и вывода времени клиенту.
  */
 class Slot extends Model
 {
@@ -28,6 +25,12 @@ class Slot extends Model
     protected function casts(): array
     {
         return ['starts_at' => 'datetime', 'ends_at' => 'datetime'];
+    }
+
+    /** Приводит даты к UTC перед сохранением через модель. */
+    public function fromDateTime($value)
+    {
+        return parent::fromDateTime(empty($value) ? $value : $this->asDateTime($value)->copy()->utc());
     }
 
     /** Слоты, начинающиеся не раньше $moment. Момент может быть в любом поясе: в запрос он уходит в UTC. */
