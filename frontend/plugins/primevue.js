@@ -48,6 +48,26 @@ const MiniBookingPreset = definePreset(Aura, {
     },
   },
   components: {
+    // Фильтр дат (SelectButton): узкие кнопки, чтобы 7 дат поместились в строку на 360 px;
+    // подпись невыбранной даты surface.600 (6.92:1; у Aura surface.500 — 4.34:1), выбранная дата — акцент.
+    togglebutton: {
+      content: { padding: '0.25rem 0.375rem' },
+      colorScheme: {
+        light: {
+          root: { color: '{surface.600}', checkedColor: '{primary.contrast.color}' },
+          content: { checkedBackground: '{primary.color}' },
+        },
+      },
+    },
+    // Ярлыки статусов (Tag): у Aura green.700 и orange.700 дают 4.57 и 4.52 — берём 800-е оттенки (6.49 и 6.38).
+    tag: {
+      colorScheme: {
+        light: {
+          success: { color: '{green.800}' },
+          warn: { color: '{orange.800}' },
+        },
+      },
+    },
     toast: {
       colorScheme: {
         light: {

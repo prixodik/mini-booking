@@ -10,22 +10,9 @@
   --mb-color-text: #334155;
   --mb-color-text-muted: #475569;
   --mb-color-border: #e2e8f0;
-  --mb-color-border-input: #64748b;
 
-  /* Акцент: фиолетовый (Aura violet.700 / 800 / 900 / 100) */
+  /* Акцент: фиолетовый (Aura violet.700) — контур фокуса; кнопки, фильтр и ярлыки статусов красит пресет PrimeVue */
   --mb-color-accent: #6d28d9;
-  --mb-color-accent-hover: #5b21b6;
-  --mb-color-accent-active: #4c1d95;
-  --mb-color-accent-soft: #ede9fe;
-  --mb-color-on-accent: #ffffff;
-
-  /* Статусы слотов */
-  --mb-color-available-fg: #166534;
-  --mb-color-available-bg: #dcfce7;
-  --mb-color-booked-fg: #9a3412;
-  --mb-color-booked-bg: #ffedd5;
-  --mb-color-past-fg: #475569;
-  --mb-color-past-bg: #e2e8f0;
 
   /* Ошибки */
   --mb-color-danger: #b91c1c;

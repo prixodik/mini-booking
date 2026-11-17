@@ -8,7 +8,8 @@ Backend — Laravel 12 (JSON API), frontend — Nuxt 3 (SPA) + PrimeVue 4, БД 
 - Верстка по БЭМ (`block__element--modifier`, один компонент — один блок), стили в `<style scoped>` компонентов, общие токены (цвета, отступы, радиусы, тени, шрифт) — `frontend/assets/css/tokens.css`.
 - Тема PrimeVue — Aura, только светлая, фиолетовый акцент `#6D28D9`, настраивается в `frontend/plugins/primevue.js` (`definePreset`), внутренние классы `.p-*` не переопределяются.
 - Шрифт Nunito Sans (`@fontsource/nunito-sans`) подключается локально; `@primeuix/themes` закреплён на MIT-версии 2.0.3.
-- Правила и расчёт контраста: `openspec/changes/redesign-booking-ui/design.md`.
+- Страница собрана из готовых компонентов PrimeVue: фильтр дат — `SelectButton` (сегодня и следующие дни, до 7 кнопок в строку на телефоне), статусы слотов — `Tag`, формы — `Dialog`/`InputText`, подтверждение — `ConfirmDialog`, уведомления — `Toast`. Их цвета заданы токенами пресета.
+- Правила и расчёт контраста: `openspec/changes/redesign-booking-ui/design.md` и `openspec/changes/use-primevue-date-filter-and-tags/design.md`.
 
 ## Структура репозитория
 

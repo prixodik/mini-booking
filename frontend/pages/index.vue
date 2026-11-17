@@ -9,6 +9,9 @@
       <Button class="page__retry" label="Повторить" icon="pi pi-refresh" :loading="loading" @click="load()" />
     </div>
 
+    <!-- На кнопках фильтра нет месяца, поэтому выбранная дата выводится полностью. -->
+    <h2 v-if="selectedDate" class="page__date">{{ formatDateLong(selectedDate) }}</h2>
+
     <div v-if="loading && !slots.length" class="page__loading" role="status">
       <ProgressSpinner style="width: 40px; height: 40px" stroke-width="5" />
       <span>Загружаем расписание…</span>
@@ -49,6 +52,7 @@ import DateFilter from '~/components/booking/DateFilter.vue'
 import SlotList from '~/components/booking/SlotList.vue'
 import BookingDialog from '~/components/booking/BookingDialog.vue'
 import { useBookingSlots } from '~/composables/useBookingSlots'
+import { formatDateLong } from '~/utils/datetime'
 
 const toast = useToast()
 const confirm = useConfirm()
@@ -155,6 +159,11 @@ async function cancelBooking(slot) {
   align-items: center;
   gap: var(--mb-space-3);
   padding: var(--mb-space-5) 0;
+}
+.page__date {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 .page__empty,
 .page__tz {

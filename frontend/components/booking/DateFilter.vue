@@ -1,24 +1,32 @@
 <template>
-  <div class="date-filter" role="radiogroup" aria-label="Фильтр по дате">
-    <button
-      v-for="option in options"
-      :key="option.value"
-      type="button"
-      role="radio"
-      class="date-filter__item"
-      :class="{ 'date-filter__item--active': option.value === modelValue }"
-      :aria-checked="option.value === modelValue"
+  <div class="date-filter">
+    <span id="date-filter-label" class="date-filter__label">Дата</span>
+    <SelectButton
+      :model-value="modelValue"
+      :options="options"
+      option-label="label"
+      option-value="value"
+      :allow-empty="false"
       :disabled="disabled"
-      @click="emit('update:modelValue', option.value)"
+      fluid
+      aria-labelledby="date-filter-label"
+      class="date-filter__buttons"
+      @update:model-value="emit('update:modelValue', $event)"
     >
-      {{ option.label }}
-    </button>
+      <template #option="{ option }">
+        <span class="date-filter__option">
+          <span class="date-filter__weekday">{{ option.weekday }}</span>
+          <span class="date-filter__day">{{ option.day }}</span>
+        </span>
+      </template>
+    </SelectButton>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
-import { formatDateLabel } from '~/utils/datetime'
+import SelectButton from 'primevue/selectbutton'
+import { formatDateLabel, formatWeekday, formatDayOfMonth } from '~/utils/datetime'
 
 const props = defineProps({
   modelValue: { type: String, default: null },
@@ -27,38 +35,39 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:modelValue'])
 
-const options = computed(() => props.dates.map((value) => ({ value, label: formatDateLabel(value) })))
+// На кнопке две строки: день недели и число; label — полная подпись для экранных читалок и поиска.
+const options = computed(() =>
+  props.dates.map((value) => ({
+    value,
+    label: formatDateLabel(value),
+    weekday: formatWeekday(value),
+    day: formatDayOfMonth(value),
+  })),
+)
 </script>
 
 <style scoped>
 .date-filter {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: var(--mb-space-2);
 }
-.date-filter__item {
-  min-height: var(--mb-tap-min);
-  padding: var(--mb-space-1);
-  font: inherit;
-  font-size: 0.875rem;
+.date-filter__label {
   font-weight: 600;
-  color: var(--mb-color-text);
-  background: var(--mb-color-surface);
-  border: 1px solid var(--mb-color-border-input);
-  border-radius: var(--mb-radius-md);
-  cursor: pointer;
 }
-.date-filter__item:hover:not(:disabled) {
-  background: var(--mb-color-accent-soft);
+.date-filter__option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
 }
-.date-filter__item--active,
-.date-filter__item--active:hover:not(:disabled) {
-  color: var(--mb-color-on-accent);
-  background: var(--mb-color-accent);
-  border-color: var(--mb-color-accent);
+.date-filter__weekday {
+  font-size: 0.75rem;
 }
-.date-filter__item:disabled {
-  cursor: default;
-  opacity: 0.6;
+.date-filter__day {
+  font-size: 1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 </style>

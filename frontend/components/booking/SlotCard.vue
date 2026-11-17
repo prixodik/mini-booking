@@ -5,10 +5,7 @@
         <i class="pi pi-clock slot-card__time-icon" aria-hidden="true" />
         {{ formatTime(item.starts_at, timezone) }}–{{ formatTime(item.ends_at, timezone) }}
       </span>
-      <span class="slot-card__status" :class="`slot-card__status--${item.status}`">
-        <i class="pi" :class="status.icon" aria-hidden="true" />
-        {{ status.label }}
-      </span>
+      <Tag class="slot-card__status" :value="status.label" :icon="`pi ${status.icon}`" :severity="status.severity" />
     </div>
 
     <div v-if="item.status !== 'past'" class="slot-card__footer">
@@ -36,6 +33,7 @@
 <script setup>
 import { computed } from 'vue'
 import Button from 'primevue/button'
+import Tag from 'primevue/tag'
 import { formatTime } from '~/utils/datetime'
 
 const props = defineProps({
@@ -47,10 +45,11 @@ const props = defineProps({
 const emit = defineEmits(['book', 'cancel'])
 
 // Статус передаётся подписью и иконкой, цвет — дополнительный признак.
+// Цвета Tag задаются токенами пресета (plugins/primevue.js).
 const STATUS = {
-  available: { label: 'Свободен', icon: 'pi-check-circle' },
-  booked: { label: 'Занят', icon: 'pi-lock' },
-  past: { label: 'Прошёл', icon: 'pi-history' },
+  available: { label: 'Свободен', icon: 'pi-check-circle', severity: 'success' },
+  booked: { label: 'Занят', icon: 'pi-lock', severity: 'warn' },
+  past: { label: 'Прошёл', icon: 'pi-history', severity: 'secondary' },
 }
 const status = computed(() => STATUS[props.item.status])
 </script>
@@ -90,25 +89,7 @@ const status = computed(() => STATUS[props.item.status])
   color: var(--mb-color-text-muted);
 }
 .slot-card__status {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--mb-space-1);
-  padding: var(--mb-space-1) var(--mb-space-2);
-  font-size: 0.875rem;
-  font-weight: 600;
-  border-radius: var(--mb-radius-sm);
-}
-.slot-card__status--available {
-  color: var(--mb-color-available-fg);
-  background: var(--mb-color-available-bg);
-}
-.slot-card__status--booked {
-  color: var(--mb-color-booked-fg);
-  background: var(--mb-color-booked-bg);
-}
-.slot-card__status--past {
-  color: var(--mb-color-past-fg);
-  background: var(--mb-color-past-bg);
+  flex-shrink: 0;
 }
 .slot-card__footer {
   margin-top: auto;

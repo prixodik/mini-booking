@@ -30,3 +30,24 @@ export function formatDateLabel(key) {
     month: 'short',
   }).format(new Date(`${key}T12:00:00Z`))
 }
+
+// Календарная дата по ключу 'YYYY-MM-DD' не зависит от пояса, поэтому форматируем её в UTC (как formatDateLabel).
+function formatKey(key, options) {
+  return new Intl.DateTimeFormat('ru-RU', { timeZone: 'UTC', ...options }).format(new Date(`${key}T12:00:00Z`))
+}
+
+/** День недели коротко, например «вт». */
+export function formatWeekday(key) {
+  return formatKey(key, { weekday: 'short' })
+}
+
+/** Число месяца, например «17». */
+export function formatDayOfMonth(key) {
+  return formatKey(key, { day: 'numeric' })
+}
+
+/** Полная дата с заглавной буквы, например «Вторник, 17 ноября». */
+export function formatDateLong(key) {
+  const text = formatKey(key, { weekday: 'long', day: 'numeric', month: 'long' })
+  return text.charAt(0).toUpperCase() + text.slice(1)
+}
