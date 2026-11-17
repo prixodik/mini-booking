@@ -129,6 +129,14 @@ class BookingApiTest extends TestCase
         $this->assertNotSame($again->json('message'), $unknown->json('message'));
     }
 
+    public function test_cancel_with_out_of_range_id_returns_404(): void
+    {
+        // Число больше PHP_INT_MAX: раньше падало с TypeError (500).
+        $this->deleteJson('/api/bookings/99999999999999999999')
+            ->assertNotFound()
+            ->assertExactJson(['message' => 'Бронь не найдена.']);
+    }
+
     public function test_database_rejects_a_second_active_booking_for_the_same_slot(): void
     {
         $slot = $this->futureSlot();
