@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-01',
   // Одностраничное SPA: данные расписания зависят от клиентских запросов,
-  // SSR не нужен (см. openspec/changes/scaffold-project/design.md).
+  // SSR не нужен (см. openspec/changes/archive/2026-11-17-scaffold-project/design.md).
   ssr: false,
   devtools: { enabled: false },
   // Явные импорты: всё, что использует файл, видно в его import (проще читать и править).

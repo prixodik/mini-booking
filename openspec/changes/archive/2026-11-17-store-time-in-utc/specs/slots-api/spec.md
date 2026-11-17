@@ -3,7 +3,7 @@
 ## MODIFIED Requirements
 
 ### Requirement: List slots
-`GET /api/slots` SHALL возвращать статус 200 и JSON вида `{"data": [slot, ...], "meta": {"timezone": "<IANA>", "server_time": "<ISO 8601>"}}`. Слоты MUST быть отсортированы по `starts_at` по возрастанию и включать все слоты, которые начинаются не раньше начала сегодняшнего дня (00:00 в часовом поясе расписания `booking.timezone`), в том числе уже прошедшие слоты сегодняшнего дня. Слоты предыдущих дней MUST NOT попадать в ответ; из БД они не удаляются. `meta.timezone` MUST быть равен `config('booking.timezone')`, а время слотов и `meta.server_time` MUST отдаваться с UTC-смещением этого пояса.
+`GET /api/slots` SHALL вернуть 200 и JSON `{"data": [slot, ...], "meta": {"timezone": "<IANA>", "server_time": "<ISO 8601>"}}`. В `data` MUST входить все слоты с 00:00 текущего дня в `booking.timezone` в порядке возрастания `starts_at`. Слоты прошлых дней MUST оставаться в БД. `meta.timezone` MUST совпадать с `config('booking.timezone')`. Время слотов и `meta.server_time` MUST содержать UTC-смещение этого пояса.
 
 #### Scenario: Сортировка
 - **WHEN** в БД слоты созданы в произвольном порядке
