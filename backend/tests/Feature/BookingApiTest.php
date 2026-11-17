@@ -103,6 +103,32 @@ class BookingApiTest extends TestCase
             ->assertJsonValidationErrors(['customer_email']);
     }
 
+    public function test_slot_id_must_be_a_json_integer(): void
+    {
+        $slot = $this->futureSlot();
+
+        foreach ([true, (string) $slot->id] as $slotId) {
+            $this->postJson('/api/bookings', $this->payload($slot, ['slot_id' => $slotId]))
+                ->assertStatus(422)
+                ->assertJsonValidationErrors(['slot_id']);
+        }
+
+        $this->assertDatabaseCount('bookings', 0);
+    }
+
+    public function test_email_format_matches_the_browser_check(): void
+    {
+        foreach (['a@b', 'a@localhost'] as $email) {
+            $this->postJson('/api/bookings', $this->payload($this->futureSlot(), ['customer_email' => $email]))
+                ->assertStatus(422)
+                ->assertJsonValidationErrors(['customer_email']);
+        }
+        $this->assertDatabaseCount('bookings', 0);
+
+        $this->postJson('/api/bookings', $this->payload($this->futureSlot(), ['customer_email' => 'иван@пример.рф']))
+            ->assertCreated();
+    }
+
     public function test_cancel_frees_the_slot_and_it_can_be_booked_again(): void
     {
         $slot = $this->futureSlot();

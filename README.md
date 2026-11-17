@@ -92,7 +92,7 @@ npm run dev                           # http://localhost:3000
 | DELETE | `/api/bookings/{id}` | 204; 404 `Бронь не найдена` / `Бронь уже отменена` |
 
 `status` слота: `available`, `booked`, `past`. Имя и email клиента в список слотов не попадают.
-Тело POST: `slot_id`, `customer_name`, `customer_email`.
+Тело POST (JSON): `slot_id` — целое число, `customer_name`, `customer_email` — email с точкой в домене (то же правило формата, что в форме).
 
 ## Как обеспечена уникальность бронирования
 

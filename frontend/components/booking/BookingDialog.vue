@@ -94,6 +94,7 @@ const name = ref('')
 const email = ref('')
 const clientErrors = ref({})
 
+// Тот же формат проверяет сервер (backend/app/Http/Requests/StoreBookingRequest.php, EMAIL_FORMAT): при правке меняйте оба.
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const slotLabel = computed(() =>
